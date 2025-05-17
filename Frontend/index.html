@@ -1,0 +1,2200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NetDash - AI-Powered Cybersecurity Solution</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        :root {
+            --primary-color: #3a56e4;
+            --secondary-color: #6c757d;
+            --accent-color: #3f8cff;
+            --text-color: #333;
+            --light-text: #f8f9fa;
+            --bg-color: #ffffff;
+            --light-bg: #f8f9fa;
+            --dark-bg: #2d3748;
+        }
+        
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+        
+        /* Header and Navigation */
+        header {
+            background-color: var(--bg-color);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: fixed;
+            width: 100%;
+            z-index: 1000;
+        }
+        
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 5%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+        }
+        
+        .logo-icon {
+            color: var(--primary-color);
+            font-size: 1.8rem;
+            margin-right: 0.5rem;
+        }
+        
+        .logo-text {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+        
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+        
+        .nav-links li {
+            margin-left: 2rem;
+        }
+        
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-color);
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+        
+        .nav-links a:hover {
+            color: var(--primary-color);
+        }
+        
+        .btn {
+            padding: 0.6rem 1.5rem;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: background-color 0.3s;
+            text-decoration: none;
+            display: inline-block;
+        }
+        
+        .btn:hover {
+            background-color: #2a46d4;
+        }
+        
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, #3a56e4 0%, #8a9ff9 100%);
+            color: white;
+            padding: 8rem 5% 5rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="%23ffffff" fill-opacity="0.05" d="M0,288L48,272C96,256,192,224,288,197.3C384,171,480,149,576,165.3C672,181,768,235,864,250.7C960,267,1056,245,1152,250.7C1248,256,1344,288,1392,304L1440,320L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path></svg>');
+            background-size: cover;
+            background-position: center;
+            opacity: 0.1;
+        }
+        
+        .hero-content {
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative;
+        }
+        
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+        
+        .hero-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+        }
+        
+        .btn-secondary {
+            background-color: transparent;
+            border: 2px solid white;
+        }
+        
+        .btn-secondary:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+        
+        /* Features Section */
+        .features {
+            padding: 5rem 5%;
+            background-color: var(--light-bg);
+        }
+        
+        .section-title {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        
+        .section-title h2 {
+            font-size: 2.5rem;
+            color: var(--text-color);
+            margin-bottom: 1rem;
+        }
+        
+        .section-title p {
+            color: var(--secondary-color);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .features-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .feature-card {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-10px);
+        }
+        
+        .feature-icon {
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            margin-bottom: 1.5rem;
+        }
+        
+        .feature-card h3 {
+            margin-bottom: 1rem;
+            font-size: 1.4rem;
+        }
+        
+        /* Download Section */
+        .download {
+            padding: 5rem 5%;
+            background-color: var(--bg-color);
+        }
+        
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .product-card {
+            background-color: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            border: 1px solid #eee;
+        }
+        
+        .product-image {
+            height: 200px;
+            background-color: #f5f5f5;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            color: var(--primary-color);
+        }
+        
+        .product-content {
+            padding: 1.5rem;
+        }
+        
+        .product-title {
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .product-version {
+            color: var(--secondary-color);
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+        
+        .download-label {
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+        
+        .download-options {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .download-option {
+            padding: 0.5rem 0.75rem;
+            background-color: #f5f5f5;
+            border-radius: 4px;
+            text-align: center;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            font-size: 0.9rem;
+        }
+        
+        .download-option:hover {
+            background-color: #e5e5e5;
+        }
+        
+        .download-option.active {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        .btn-download {
+            width: 100%;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .btn-download i {
+            margin-right: 0.5rem;
+        }
+        
+        .system-requirements {
+            margin-top: 1rem;
+            font-size: 0.9rem;
+            color: var(--secondary-color);
+        }
+        
+        .system-requirements summary {
+            cursor: pointer;
+            color: var(--text-color);
+            font-weight: 500;
+        }
+        
+        .system-requirements ul {
+            margin-top: 0.5rem;
+            margin-left: 1.5rem;
+        }
+        
+        /* Documentation Section */
+        .documentation {
+            padding: 5rem 5%;
+            background-color: var(--light-bg);
+        }
+        
+        .doc-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+        }
+        
+        .doc-header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 2rem;
+            text-align: center;
+        }
+        
+        .doc-header h3 {
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+        }
+        
+        .doc-content {
+            padding: 2rem;
+        }
+        
+        .doc-links {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        .doc-link-card {
+            border: 1px solid #eee;
+            border-radius: 8px;
+            padding: 1.5rem;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .doc-link-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .doc-link-icon {
+            font-size: 2rem;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+        
+        .doc-link-card h4 {
+            margin-bottom: 0.5rem;
+        }
+        
+        .doc-link-card p {
+            color: var(--secondary-color);
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+        
+        .doc-link {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+        }
+        
+        .doc-link i {
+            margin-left: 0.5rem;
+            font-size: 0.8rem;
+        }
+        
+        /* Support Section */
+        .support {
+            padding: 5rem 5%;
+            background-color: var(--bg-color);
+        }
+        
+        .support-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+        
+        .support-card {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            padding: 2rem;
+            text-align: center;
+            transition: transform 0.3s;
+        }
+        
+        .support-card:hover {
+            transform: translateY(-10px);
+        }
+        
+        .support-icon {
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            margin-bottom: 1.5rem;
+        }
+        
+        .support-card h3 {
+            margin-bottom: 1rem;
+        }
+        
+        .support-card p {
+            color: var(--secondary-color);
+            margin-bottom: 1.5rem;
+        }
+        
+        /* Footer */
+        footer {
+            background-color: var(--dark-bg);
+            color: white;
+            padding: 4rem 5% 2rem;
+        }
+        
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .footer-column h3 {
+            font-size: 1.3rem;
+            margin-bottom: 1.5rem;
+            color: #eaeaea;
+        }
+        
+        .footer-links {
+            list-style: none;
+        }
+        
+        .footer-links li {
+            margin-bottom: 0.8rem;
+        }
+        
+        .footer-links a {
+            color: #a0aec0;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        .footer-links a:hover {
+            color: white;
+        }
+        
+        .copyright {
+            text-align: center;
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 1px solid #4a5568;
+            color: #a0aec0;
+        }
+        
+        /* Login Modal */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 9999;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .login-card {
+            background-color: white;
+            width: 350px;
+            border-radius: 10px;
+            padding: 2rem;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            position: relative;
+            z-index: 10000;
+        }
+        
+        .close-btn {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            font-size: 1.5rem;
+            color: #aaa;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+        
+        .close-btn:hover {
+            color: var(--text-color);
+        }
+        
+        .login-title {
+            font-size: 1.8rem;
+            margin-bottom: 0.5rem;
+            color: var(--text-color);
+        }
+        
+        .login-subtitle {
+            color: var(--secondary-color);
+            margin-bottom: 1.5rem;
+            font-size: 0.9rem;
+        }
+        
+        .tab-bar {
+            display: flex;
+            border-bottom: 1px solid #eee;
+            margin-bottom: 1.5rem;
+        }
+        
+        .tab {
+            flex: 1;
+            padding: 0.8rem 0;
+            color: var(--secondary-color);
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+        
+        .tab.active {
+            color: var(--primary-color);
+            border-bottom: 2px solid var(--primary-color);
+        }
+        
+        .login-card input {
+            width: 100%;
+            padding: 0.8rem;
+            margin-bottom: 1rem;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            font-size: 1rem;
+        }
+        
+        .login-card input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+        
+        .remember-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            font-size: 0.9rem;
+        }
+        
+        .checkbox-label {
+            display: flex;
+            align-items: center;
+        }
+        
+        .checkbox-label input {
+            width: auto;
+            margin-right: 0.5rem;
+            margin-bottom: 0;
+        }
+        
+        .forgot-link {
+            color: var(--primary-color);
+            text-decoration: none;
+        }
+        
+        .login-button {
+            width: 100%;
+            padding: 0.8rem;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: background-color 0.3s;
+        }
+        
+        .login-button:hover {
+            background-color: #3955c8;
+        }
+        
+        .signup-row {
+            margin-top: 1.5rem;
+            font-size: 0.9rem;
+            color: var(--secondary-color);
+        }
+        
+        .signup-link {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 500;
+        }
+        
+        /* Benefits Section */
+        .benefits {
+            padding: 5rem 5%;
+            background-color: var(--light-bg);
+        }
+        
+        .benefits-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+        
+        .benefit-item {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            text-align: center;
+            transition: transform 0.3s;
+        }
+        
+        .benefit-item:hover {
+            transform: translateY(-10px);
+        }
+        
+        .benefit-icon {
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            margin-bottom: 1.5rem;
+        }
+        
+        .benefit-item h3 {
+            margin-bottom: 1rem;
+            font-size: 1.4rem;
+        }
+        
+        .benefit-item p {
+            color: var(--secondary-color);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.2rem;
+            }
+            
+            .hero p {
+                font-size: 1rem;
+            }
+            
+            .hero-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .section-title h2 {
+                font-size: 2rem;
+            }
+            
+            .nav-links {
+                display: none; /* Simple solution for mobile - in real site would add hamburger menu */
+            }
+            
+            .mobile-nav-toggle {
+                display: block;
+            }
+
+            .download-options {
+                grid-template-columns: 1fr;
+            }
+            
+            .admin-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .admin-image {
+                height: 300px;
+                order: 2;
+            }
+            
+            .admin-content {
+                order: 1;
+            }
+            
+            .admin-feature-item {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .admin-preview-card {
+                width: 95%;
+                padding: 1.5rem;
+            }
+        }
+
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+}
+
+.login-card {
+    background-color: white;
+    border-radius: 10px;
+    width: 350px;
+    padding: 2rem;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+    position: relative;
+}
+
+.close-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    cursor: pointer;
+    font-size: 24px;
+    color: #888;
+}
+
+.tab-bar {
+    display: flex;
+    margin-bottom: 20px;
+}
+
+.tab {
+    flex: 1;
+    background: none;
+    border: none;
+    padding: 10px;
+    font-weight: bold;
+    border-bottom: 2px solid transparent;
+    cursor: pointer;
+}
+
+.tab.active {
+    border-bottom-color: #3a56e4;
+    color: #3a56e4;
+}
+
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    
+<script>
+  // Enhanced login JavaScript with Remember Me and Forgot Password functionality
+document.addEventListener('DOMContentLoaded', function() {
+    const loginBtn = document.getElementById('login-btn');
+    const loginModal = document.querySelector('.modal-overlay');
+    const closeBtn = document.querySelector('.close-btn');
+    const loginTabs = document.querySelectorAll('.tab');
+    const signupLink = document.querySelector('.signup-link');
+    const loginLink = document.querySelector('.login-link');
+    const forgotPasswordLink = document.getElementById('forgot-password-link');
+    const backToLoginLink = document.querySelector('.back-to-login-link');
+    
+    const loginForm = document.getElementById('login-form');
+    const signupForm = document.getElementById('signup-form');
+    const forgotPasswordForm = document.getElementById('forgot-password-form');
+    const rememberMeCheckbox = document.getElementById('remember-me');
+
+    // Check for saved login credentials
+    function checkSavedCredentials() {
+        const savedEmail = localStorage.getItem('netdash_email');
+        const rememberMe = localStorage.getItem('netdash_remember') === 'true';
+        
+        if (savedEmail && rememberMe) {
+            const emailInput = document.querySelector('input[name="email"]');
+            if (emailInput) {
+                emailInput.value = savedEmail;
+                if (rememberMeCheckbox) {
+                    rememberMeCheckbox.checked = true;
+                }
+            }
+        }
+    }
+
+    function toggleModal(show = true) {
+        if (loginModal) {
+            loginModal.style.display = show ? 'flex' : 'none';
+        }
+    }
+
+    function showForm(formId) {
+        // Hide all forms
+        loginForm.style.display = 'none';
+        signupForm.style.display = 'none';
+        if (forgotPasswordForm) {
+            forgotPasswordForm.style.display = 'none';
+        }
+        
+        // Show requested form
+        document.getElementById(formId).style.display = 'block';
+        
+        // Update tabs if applicable
+        if (formId === 'login-form') {
+            loginTabs[0].classList.add('active');
+            loginTabs[1].classList.remove('active');
+        } else if (formId === 'signup-form') {
+            loginTabs[0].classList.remove('active');
+            loginTabs[1].classList.add('active');
+        }
+    }
+
+    // Open modal
+    if (loginBtn) {
+        loginBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            toggleModal(true);
+            showForm('login-form');
+            checkSavedCredentials();
+        });
+    }
+
+    // Close modal
+    if (closeBtn) {
+        closeBtn.addEventListener('click', () => {
+            toggleModal(false);
+        });
+    }
+
+    // Close modal on outside click
+    if (loginModal) {
+        loginModal.addEventListener('click', function(e) {
+            if (e.target === loginModal) {
+                toggleModal(false);
+            }
+        });
+    }
+
+    // Tab switching
+    loginTabs.forEach((tab, index) => {
+        tab.addEventListener('click', function() {
+            loginTabs.forEach(t => t.classList.remove('active'));
+            this.classList.add('active');
+            
+            showForm(index === 0 ? 'login-form' : 'signup-form');
+        });
+    });
+
+    // Signup link toggle
+    if (signupLink) {
+        signupLink.addEventListener('click', function(e) {
+            e.preventDefault();
+            showForm('signup-form');
+        });
+    }
+
+    // Login link toggle
+    if (loginLink) {
+        loginLink.addEventListener('click', function(e) {
+            e.preventDefault();
+            showForm('login-form');
+        });
+    }
+    
+    // Forgot password link
+    if (forgotPasswordLink) {
+        forgotPasswordLink.addEventListener('click', function(e) {
+            e.preventDefault();
+            showForm('forgot-password-form');
+        });
+    }
+    
+    // Back to login link
+    if (backToLoginLink) {
+        backToLoginLink.addEventListener('click', function(e) {
+            e.preventDefault();
+            showForm('login-form');
+        });
+    }
+
+    // Login form submission
+    if (loginForm) {
+        loginForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const emailInput = this.querySelector('input[name="email"]');
+            const passwordInput = this.querySelector('input[name="password"]');
+            const rememberMe = rememberMeCheckbox && rememberMeCheckbox.checked;
+
+            fetch('/api/login', {
+                method: 'POST',
+                credentials: 'include',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify({
+                    email: emailInput.value,
+                    password: passwordInput.value,
+                    remember: rememberMe
+                })
+            })
+            .then(response => {
+                if (!response.ok) {
+                    return response.json().then(errorData => {
+                        throw new Error(errorData.message || 'Login failed');
+                    });
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.status === 'success') {
+                    // Save credentials if remember me is checked
+                    if (rememberMe) {
+                        localStorage.setItem('netdash_email', emailInput.value);
+                        localStorage.setItem('netdash_remember', 'true');
+                    } else {
+                        // Clear saved credentials
+                        localStorage.removeItem('netdash_email');
+                        localStorage.removeItem('netdash_remember');
+                    }
+                    
+                    // Redirect based on user role
+                    if (data.user.role === 'platform_admin') {
+                        window.location.href = '/admin_dashboard.html';
+                    } else if (data.user.role === 'company_admin') {
+                        window.location.href = '/company_dashboard.html';
+                    } else {
+                        // For guests, stay on main page but close modal
+                        toggleModal(false);
+                        alert('Login successful!');
+                        // Update UI for logged-in guest users
+                        updateUIForLoggedInUser(data.user);
+                    }
+                } else {
+                    throw new Error(data.message || 'Login failed');
+                }
+            })
+            .catch(error => {
+                console.error('Login error:', error);
+                alert(error.message || 'An unexpected error occurred. Please try again.');
+            });
+        });
+    }
+    
+    // Forgot password form submission
+    if (forgotPasswordForm) {
+        forgotPasswordForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const recoveryEmailInput = this.querySelector('input[name="recovery_email"]');
+            
+            fetch('/api/reset-password', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    email: recoveryEmailInput.value
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    alert('Password reset email sent! Please check your inbox.');
+                    showForm('login-form');
+                } else {
+                    alert(data.message || 'Failed to send reset email. Please try again.');
+                }
+            })
+            .catch(error => {
+                console.error('Password reset error:', error);
+                alert('An unexpected error occurred. Please try again.');
+            });
+        });
+    }
+
+    // Signup form submission
+    if (signupForm) {
+        signupForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const firstNameInput = this.querySelector('input[name="first_name"]');
+            const lastNameInput = this.querySelector('input[name="last_name"]');
+            const emailInput = this.querySelector('input[name="email"]');
+            const passwordInput = this.querySelector('input[name="password"]');
+            const confirmPasswordInput = this.querySelector('input[name="confirm_password"]');
+            const roleInput = this.querySelector('select[name="role"]');
+
+            if (passwordInput.value !== confirmPasswordInput.value) {
+                alert('Passwords do not match');
+                return;
+            }
+
+            const selectedRole = roleInput ? roleInput.value : 'guest';
+
+            fetch('/api/register', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    first_name: firstNameInput.value,
+                    last_name: lastNameInput.value,
+                    email: emailInput.value,
+                    password: passwordInput.value,
+                    role: selectedRole
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    alert('Registration successful! Please log in.');
+                    showForm('login-form');
+                } else {
+                    alert(data.message || 'Registration failed');
+                }
+            })
+            .catch(error => {
+                console.error('Signup error:', error);
+                alert('Signup failed. Please try again.');
+            });
+        });
+    }
+
+    // Function to update UI for logged-in users
+    function updateUIForLoggedInUser(user) {
+        const loginBtn = document.getElementById('login-btn');
+        if (loginBtn) {
+            loginBtn.innerHTML = `<i class="fas fa-user"></i> ${user.name || user.first_name || 'User'}`;
+            loginBtn.onclick = function(e) {
+                e.preventDefault();
+                // Show user menu or profile options
+                showUserMenu(user);
+            };
+        }
+    }
+    
+    // Function to show user menu
+    function showUserMenu(user) {
+        // You can implement a dropdown menu here
+        const actions = [
+            'View Profile',
+            'Account Settings',
+            'Logout'
+        ];
+        
+        alert(`Logged in as: ${user.name || user.email}\nRole: ${user.role}`);
+    }
+    
+    // Check if user is already logged in on page load
+    fetch('/api/check-auth', {
+        method: 'GET',
+        credentials: 'include'
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.authenticated) {
+            updateUIForLoggedInUser(data.user);
+        } else {
+            // Check for saved credentials on page load
+            checkSavedCredentials();
+        }
+    })
+    .catch(error => {
+        console.error('Auth check error:', error);
+    });
+});
+
+
+
+
+    // Review Form Submission
+    const reviewForm = document.getElementById('reviewForm');
+    const reviewMessage = document.getElementById('reviewMessage');
+    
+    if (reviewForm) {
+        reviewForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Show processing message
+            reviewMessage.textContent = "Processing your review...";
+            reviewMessage.style.color = "#3a56e4";
+            
+            const nameInput = this.querySelector('input[name="name"]');
+            const ratingInput = this.querySelector('select[name="rating"]');
+            const commentInput = this.querySelector('textarea[name="comment"]');
+            
+            // Check if all fields are filled
+            if (!nameInput.value || !ratingInput.value || !commentInput.value) {
+                reviewMessage.textContent = "Please fill in all fields";
+                reviewMessage.style.color = "red";
+                return;
+            }
+            
+            // Send the review to the server
+            fetch('/api/reviews', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify({
+                    name: nameInput.value,
+                    rating: parseInt(ratingInput.value),
+                    comment: commentInput.value
+                })
+            })
+            .then(response => {
+                // Try to parse the JSON, but handle the case where the response might not be JSON
+                return response.text().then(text => {
+                    try {
+                        return JSON.parse(text);
+                    } catch (e) {
+                        // If it's not valid JSON, create an error object with the response text
+                        throw new Error(text || 'Server error');
+                    }
+                });
+            })
+            .then(data => {
+                if (data.status === 'success') {
+                    reviewMessage.textContent = "Review submitted successfully!";
+                    reviewMessage.style.color = "green";
+                    reviewForm.reset();
+                    
+                    // Optionally reload reviews or add the new review to the list
+                    setTimeout(function() {
+                        loadReviews(); // Make sure this function exists
+                    }, 500);
+                } else {
+                    reviewMessage.textContent = data.message || "Failed to submit review. Please try again.";
+                    reviewMessage.style.color = "red";
+                }
+            })
+            .catch(error => {
+                console.error('Review submission error:', error);
+                
+                // Check if the user is not logged in
+                if (error.message && error.message.includes('Authentication required')) {
+                    reviewMessage.textContent = "Please log in to submit a review";
+                } else {
+                    reviewMessage.textContent = "Failed to submit review. Please try again.";
+                }
+                reviewMessage.style.color = "red";
+            });
+        });
+    }
+</script>
+
+</head>
+<body>
+    <!-- Header and Navigation -->
+    <header>
+        <nav class="navbar">
+            <a href="#" class="logo">
+                <div class="logo-icon"><i class="fas fa-shield-alt"></i></div>
+                <div class="logo-text">NetDash</div>
+            </a>
+            <ul class="nav-links">
+                <li><a href="#features">Features</a></li>
+                <li><a href="#download-section">Download</a></li>
+                <li><a href="#documentation">Documentation</a></li>
+                <li><a href="#support">Support</a></li>
+                <li><a href="#login" id="login-btn" class="btn">Login</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Stay Ahead of Cyber Threats with AI-Powered Security</h1>
+            <p>Protect your business with real-time threat monitoring, automated incident response, and AI-driven anomaly detection—all in one powerful SIEM platform.</p>
+            <div class="hero-buttons">
+                <a href="#download-section" class="btn">Download Now</a>
+                <a href="#documentation" class="btn btn-secondary">View Documentation</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features" id="features">
+        <div class="section-title">
+            <h2>Advanced Security Features</h2>
+            <p>Discover how NetDash provides comprehensive protection for your network</p>
+        </div>
+        
+        <div class="features-container">
+            <div class="feature-card">
+                <div class="feature-icon"><i class="fas fa-robot"></i></div>
+                <h3>AI-Powered Threat Detection</h3>
+                <p>Our advanced machine learning algorithms continuously analyze network traffic to identify potential threats before they cause damage.</p>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon"><i class="fas fa-chart-line"></i></div>
+                <h3>Real-Time Monitoring</h3>
+                <p>Monitor network activity in real-time with customizable dashboards and alerts to keep your security team informed.</p>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon"><i class="fas fa-shield-virus"></i></div>
+                <h3>Automated Incident Response</h3>
+                <p>Configure automatic responses to common threats, reducing resolution time and minimizing potential damage.</p>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon"><i class="fas fa-search"></i></div>
+                <h3>Anomaly Detection</h3>
+                <p>Identify unusual patterns and behaviors that might indicate a security breach with our sophisticated anomaly detection system.</p>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon"><i class="fas fa-file-alt"></i></div>
+                <h3>Comprehensive Reporting</h3>
+                <p>Generate detailed security reports for compliance, auditing, and internal security reviews with just a few clicks.</p>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon"><i class="fas fa-network-wired"></i></div>
+                <h3>Network-Wide Integration</h3>
+                <p>Seamlessly integrate with your existing security infrastructure and tools for a unified security approach.</p>
+            </div>
+        </div>
+    </section>
+
+<!-- Pricing Comparison Table -->
+<section class="pricing-comparison">
+    <h2>Choose the Right Plan for Your Business</h2>
+    <div class="pricing-table-container">
+        <table class="pricing-table">
+            <thead>
+                <tr>
+                    <th>Feature</th>
+                    <th>NetDash Standard</th>
+                    <th>NetDash Professional</th>
+                    <th>NetDash Enterprise</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Price</td>
+                    <td>$2,500/month</td>
+                    <td>$5,000/month</td>
+                    <td>$9,000/month</td>
+                </tr>
+                <tr>
+                    <td>Devices Supported</td>
+                    <td>Up to 100 devices</td>
+                    <td>Up to 500 devices</td>
+                    <td>Unlimited devices</td>
+                </tr>
+                <tr>
+                    <td>Data Retention</td>
+                    <td>30-day retention</td>
+                    <td>90-day retention</td>
+                    <td>Custom retention policies</td>
+                </tr>
+                <tr>
+                    <td>Admin Accounts</td>
+                    <td>3 admin accounts</td>
+                    <td>10 admin accounts</td>
+                    <td>Unlimited admin accounts</td>
+                </tr>
+                <tr>
+                    <td>AI/ML Capabilities</td>
+                    <td>Standard ML models</td>
+                    <td>Advanced ML models</td>
+                    <td>Custom ML models</td>
+                </tr>
+                <tr>
+                    <td>Support Level</td>
+                    <td>Email and chat support</td>
+                    <td>Priority support</td>
+                    <td>24/7 dedicated support</td>
+                </tr>
+                <tr>
+                    <td>Threat Intelligence</td>
+                    <td>Basic threat feeds</td>
+                    <td>Enhanced threat feeds</td>
+                    <td>Advanced threat intelligence</td>
+                </tr>
+                <tr>
+                    <td>Compliance Reporting</td>
+                    <td>Standard reports</td>
+                    <td>Advanced compliance reports</td>
+                    <td>Custom compliance dashboards</td>
+                </tr>
+                <tr>
+                    <td>API Access</td>
+                    <td>Limited API access</td>
+                    <td>Extended API access</td>
+                    <td>Full API access</td>
+                </tr>
+                <tr>
+                    <td>Integration Options</td>
+                    <td>Standard integrations</td>
+                    <td>Advanced integrations</td>
+                    <td>Custom integrations</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</section>
+
+<!-- Plan Selection Guide -->
+<section class="use-case-guidance">
+    <h2>Which Plan is Right for You?</h2>
+    <div class="use-case-container">
+        <div class="use-case-card">
+            <h3>Choose NetDash Standard if:</h3>
+            <ul>
+                <li>You're a small to mid-sized business (up to 100 devices)</li>
+                <li>You need comprehensive security monitoring</li>
+                <li>Your compliance requirements are standard</li>
+                <li>You have a dedicated but small security team</li>
+                <li>You're looking for a cost-effective solution</li>
+            </ul>
+            <a href="#standard" class="btn">Learn More About Standard</a>
+        </div>
+        
+        <div class="use-case-card">
+            <h3>Choose NetDash Professional if:</h3>
+            <ul>
+                <li>You're a mid-sized to large business (up to 500 devices)</li>
+                <li>You need advanced security monitoring capabilities</li>
+                <li>You have moderate compliance and regulatory requirements</li>
+                <li>You have a growing security team (up to 10 administrators)</li>
+                <li>You need priority support and more advanced features</li>
+            </ul>
+            <a href="#professional" class="btn">Learn More About Professional</a>
+        </div>
+        
+        <div class="use-case-card">
+            <h3>Choose NetDash Enterprise if:</h3>
+            <ul>
+                <li>You're a large enterprise with complex infrastructure</li>
+                <li>You need unlimited device monitoring</li>
+                <li>You have strict compliance and regulatory requirements</li>
+                <li>You require customized ML models for your environment</li>
+                <li>You need 24/7 dedicated support and custom integrations</li>
+            </ul>
+            <a href="#enterprise" class="btn">Learn More About Enterprise</a>
+        </div>
+    </div>
+</section>
+
+<!-- Complete Download Section with All Three Tiers -->
+<section class="product-cards"id="download-section" >
+    <div class="product-grid">
+        <!-- Standard Tier -->
+        <div class="product-card" id="standard">
+            <div class="product-image">
+                <i class="fas fa-shield-alt"></i>
+            </div>
+            <div class="product-content">
+                <h3 class="product-title">NetDash Standard</h3>
+                <div class="product-version">Version 3.2.5 | April 2025</div>
+                <p>Perfect for small to mid-sized businesses looking for comprehensive security monitoring and protection.</p>
+                
+                <div class="download-label">Select Operating System:</div>
+                <div class="download-options">
+                    <div class="download-option active" data-os="windows">
+                        <i class="fab fa-windows"></i> Windows
+                    </div>
+                    <div class="download-option" data-os="mac">
+                        <i class="fab fa-apple"></i> macOS
+                    </div>
+                    <div class="download-option" data-os="linux">
+                        <i class="fab fa-linux"></i> Linux
+                    </div>
+                    <div class="download-option" data-os="docker">
+                        <i class="fab fa-docker"></i> Docker
+                    </div>
+                </div>
+                
+                <a href="#" class="btn btn-download" id="download-btn-standard">
+                    <i class="fas fa-download"></i> Download Now
+                </a>
+                
+                <details class="system-requirements">
+                    <summary>System Requirements</summary>
+                    <ul>
+                        <li>CPU: Quad-core 2.5GHz or higher</li>
+                        <li>RAM: 8GB minimum (16GB recommended)</li>
+                        <li>Disk: 100GB available space</li>
+                        <li>OS: Windows 10/11, macOS 12+, Ubuntu 20.04+</li>
+                        <li>Network: Broadband connection</li>
+                    </ul>
+                </details>
+            </div>
+        </div>
+        
+        <!-- Professional Tier -->
+        <div class="product-card" id="professional">
+            <div class="product-image">
+                <i class="fas fa-shield-alt"></i>
+            </div>
+            <div class="product-content">
+                <h3 class="product-title">NetDash Professional</h3>
+                <div class="product-version">Version 3.2.5 | April 2025</div>
+                <p>Ideal for mid-sized to large enterprises with growing security needs and compliance requirements.</p>
+                
+                <div class="download-label">Select Operating System:</div>
+                <div class="download-options">
+                    <div class="download-option active" data-os="windows">
+                        <i class="fab fa-windows"></i> Windows
+                    </div>
+                    <div class="download-option" data-os="mac">
+                        <i class="fab fa-apple"></i> macOS
+                    </div>
+                    <div class="download-option" data-os="linux">
+                        <i class="fab fa-linux"></i> Linux
+                    </div>
+                    <div class="download-option" data-os="docker">
+                        <i class="fab fa-docker"></i> Docker
+                    </div>
+                </div>
+                
+                <a href="#" class="btn btn-download" id="download-btn-professional">
+                    <i class="fas fa-download"></i> Download Free Trial
+                </a>
+                
+                <details class="system-requirements">
+                    <summary>System Requirements</summary>
+                    <ul>
+                        <li>CPU: 6-core 2.8GHz or higher</li>
+                        <li>RAM: 12GB minimum (24GB recommended)</li>
+                        <li>Disk: 250GB available space</li>
+                        <li>OS: Windows 10/11, macOS 12+, Ubuntu 20.04+</li>
+                        <li>Network: High-speed broadband connection</li>
+                    </ul>
+                </details>
+            </div>
+        </div>
+        
+        <!-- Enterprise Tier -->
+        <div class="product-card" id="enterprise">
+            <div class="product-image">
+                <i class="fas fa-shield-alt"></i>
+            </div>
+            <div class="product-content">
+                <h3 class="product-title">NetDash Enterprise</h3>
+                <div class="product-version">Version 3.2.5 | April 2025</div>
+                <p>Advanced security features designed for large enterprises with complex network infrastructure needs.</p>
+                
+                <div class="download-label">Select Operating System:</div>
+                <div class="download-options">
+                    <div class="download-option active" data-os="windows">
+                        <i class="fab fa-windows"></i> Windows
+                    </div>
+                    <div class="download-option" data-os="mac">
+                        <i class="fab fa-apple"></i> macOS
+                    </div>
+                    <div class="download-option" data-os="linux">
+                        <i class="fab fa-linux"></i> Linux
+                    </div>
+                    <div class="download-option" data-os="docker">
+                        <i class="fab fa-docker"></i> Docker
+                    </div>
+                </div>
+                
+                <a href="#" class="btn btn-download" id="download-btn-enterprise">
+                    <i class="fas fa-download"></i> Download Free Trial
+                </a>
+                
+                <details class="system-requirements">
+                    <summary>System Requirements</summary>
+                    <ul>
+                        <li>CPU: 8-core 3.0GHz or higher</li>
+                        <li>RAM: 16GB minimum (32GB recommended)</li>
+                        <li>Disk: 500GB available space</li>
+                        <li>OS: Windows Server 2019+, macOS 12+, Ubuntu 20.04+</li>
+                        <li>Network: High-speed broadband connection</li>
+                    </ul>
+                </details>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+    /* Pricing table and use case styles */
+    .pricing-comparison, .use-case-guidance {
+        padding: 40px 5%;
+        background-color: #f9f9f9;
+        margin-bottom: 30px;
+    }
+    
+    .pricing-comparison h2, .use-case-guidance h2 {
+        text-align: center;
+        margin-bottom: 30px;
+        color: #333;
+    }
+    
+    .pricing-table-container {
+        overflow-x: auto;
+    }
+    
+    .pricing-table {
+        width: 100%;
+        border-collapse: collapse;
+        max-width: 1200px;
+        margin: 0 auto;
+        background-color: white;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        border-radius: 8px;
+        overflow: hidden;
+    }
+    
+    .pricing-table th, .pricing-table td {
+        padding: 15px;
+        text-align: left;
+        border-bottom: 1px solid #eee;
+    }
+    
+    .pricing-table th {
+        background-color: #3a56e4;
+        color: white;
+        font-weight: 600;
+    }
+    
+    .pricing-table tr:nth-child(even) {
+        background-color: #f8f9fa;
+    }
+    
+    .pricing-table tr:hover {
+        background-color: #f1f3f9;
+    }
+    
+    .use-case-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 30px;
+        justify-content: center;
+    }
+    
+    .use-case-card {
+        background-color: white;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        padding: 25px;
+        flex: 1;
+        min-width: 300px;
+        max-width: 450px;
+    }
+    
+    .use-case-card h3 {
+        color: #3a56e4;
+        margin-bottom: 15px;
+    }
+    
+    .use-case-card ul {
+        margin-bottom: 20px;
+        padding-left: 20px;
+    }
+    
+    .use-case-card li {
+        margin-bottom: 10px;
+        position: relative;
+        list-style-type: none;
+        padding-left: 25px;
+    }
+    
+    .use-case-card li:before {
+        content: '✓';
+        position: absolute;
+        left: 0;
+        color: #3a56e4;
+        font-weight: bold;
+    }
+    
+    /* Product cards styles */
+    .product-cards {
+        padding: 40px 5%;
+    }
+    
+    .product-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+        gap: 30px;
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+    
+    .product-card {
+        background-color: white;
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        transition: transform 0.3s;
+    }
+    
+    .product-card:hover {
+        transform: translateY(-5px);
+    }
+    
+    .product-image {
+        height: 150px;
+        background-color: #f5f5f5;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 3rem;
+        color: #3a56e4;
+    }
+    
+    .product-content {
+        padding: 25px;
+    }
+    
+    .product-title {
+        font-size: 1.5rem;
+        margin-bottom: 8px;
+        color: #333;
+    }
+    
+    .product-version {
+        color: #6c757d;
+        font-size: 0.9rem;
+        margin-bottom: 15px;
+    }
+    
+    .download-label {
+        font-weight: 600;
+        margin-bottom: 10px;
+    }
+    
+    .download-options {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+        margin-bottom: 20px;
+    }
+    
+    .download-option {
+        padding: 10px;
+        background-color: #f5f5f5;
+        border-radius: 4px;
+        text-align: center;
+        cursor: pointer;
+        transition: all 0.3s;
+    }
+    
+    .download-option:hover {
+        background-color: #e5e5e5;
+    }
+    
+    .download-option.active {
+        background-color: #3a56e4;
+        color: white;
+    }
+    
+    .btn-download {
+        display: block;
+        width: 100%;
+        padding: 12px;
+        background-color: #3a56e4;
+        color: white;
+        text-align: center;
+        border-radius: 4px;
+        text-decoration: none;
+        font-weight: 600;
+        margin-bottom: 20px;
+        transition: background-color 0.3s;
+    }
+    
+    .btn-download:hover {
+        background-color: #2a46d4;
+    }
+    
+    .system-requirements {
+        margin-top: 15px;
+        font-size: 0.9rem;
+    }
+    
+    .system-requirements summary {
+        cursor: pointer;
+        font-weight: 600;
+        color: #333;
+    }
+    
+    .system-requirements ul {
+        margin-top: 10px;
+        padding-left: 20px;
+    }
+    
+    /* Responsive styles */
+    @media (max-width: 768px) {
+        .use-case-container {
+            flex-direction: column;
+        }
+        
+        .use-case-card {
+            max-width: 100%;
+        }
+        
+        .product-grid {
+            grid-template-columns: 1fr;
+        }
+        
+        .download-options {
+            grid-template-columns: 1fr 1fr;
+        }
+    }
+   
+
+
+</style>
+
+    <!-- Documentation Section -->
+    <section class="documentation" id="documentation">
+        <div class="section-title">
+            <h2>Documentation & Resources</h2>
+            <p>Everything you need to get the most out of NetDash</p>
+        </div>
+        
+        <div class="doc-container">
+            <div class="doc-header">
+                <h3>Comprehensive Documentation</h3>
+                <p>Step-by-step guides, tutorials, and reference materials</p>
+            </div>
+            
+            <div class="doc-content">
+                <div class="doc-links">
+                    <div class="doc-link-card">
+                        <div class="doc-link-icon"><i class="fas fa-book"></i></div>
+                        <h4>Getting Started Guide</h4>
+                        <p>Learn the basics of NetDash installation, configuration, and usage.</p>
+                        <a href="#" class="doc-link">View Guide <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                    
+                    <div class="doc-link-card">
+                        <div class="doc-link-icon"><i class="fas fa-graduation-cap"></i></div>
+                        <h4>Tutorials</h4>
+                        <p>Step-by-step tutorials covering common security tasks and workflows.</p>
+                        <a href="#" class="doc-link">View Tutorials <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                    
+                    <div class="doc-link-card">
+                        <div class="doc-link-icon"><i class="fas fa-file-code"></i></div>
+                        <h4>API Documentation</h4>
+                        <p>Detailed API reference for developers and integrators.</p>
+                        <a href="#" class="doc-link">View API Docs <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                    
+                    <div class="doc-link-card">
+                        <div class="doc-link-icon"><i class="fas fa-cube"></i></div>
+                        <h4>Feature Guides</h4>
+                        <p>Detailed explanations of NetDash features and capabilities.</p>
+                        <a href="#" class="doc-link">View Features <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Additional Benefits Section -->
+    <section class="benefits" id="benefits">
+        <div class="section-title">
+            <h2>Why Choose NetDash</h2>
+            <p>Industry-leading security solutions trusted by businesses worldwide</p>
+        </div>
+        
+        <div class="benefits-container">
+            <div class="benefit-item">
+                <div class="benefit-icon"><i class="fas fa-shield-alt"></i></div>
+                <h3>Enterprise-Grade Security</h3>
+                <p>Our solutions meet the highest security standards, providing robust protection for organizations of all sizes.</p>
+            </div>
+            
+            <div class="benefit-item">
+                <div class="benefit-icon"><i class="fas fa-sync-alt"></i></div>
+                <h3>Seamless Integration</h3>
+                <p>Easily integrate with your existing infrastructure and security tools for a unified defense strategy.</p>
+            </div>
+            
+            <div class="benefit-item">
+                <div class="benefit-icon"><i class="fas fa-tachometer-alt"></i></div>
+                <h3>Performance Optimized</h3>
+                <p>Designed for maximum efficiency with minimal system impact, ensuring your operations run smoothly.</p>
+            </div>
+            
+            <div class="benefit-item">
+                <div class="benefit-icon"><i class="fas fa-headset"></i></div>
+                <h3>24/7 Expert Support</h3>
+                <p>Our dedicated security specialists are available around the clock to assist with any issues or questions.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Support Section -->
+    <section class="support" id="support">
+        <div class="section-title">
+            <h2>Support & Community</h2>
+            <p>Get help when you need it and connect with other NetDash users</p>
+        </div>
+        
+        <div class="support-container">
+            <div class="support-card">
+                <div class="support-icon"><i class="fas fa-headset"></i></div>
+                <h3>Technical Support</h3>
+                <p>Our dedicated technical support team is ready to help resolve any issues you encounter.</p>
+                <a href="#" class="btn">Contact Support</a>
+            </div>
+            
+            <div class="support-card">
+                <div class="support-icon"><i class="fas fa-users"></i></div>
+                <h3>Community Forum</h3>
+                <p>Join our active community to share experiences, tips, and best practices.</p>
+                <a href="#" class="btn">Join Forum</a> <!-- Added missing button -->
+            </div>
+        </div>
+
+    </section> <!-- This closes the last support section -->
+
+    <!-- Login Modal -->
+<div class="modal-overlay">
+    <div class="login-card">
+    <div class="close-btn">&times;</div>
+    <h2 class="login-title">Welcome Back</h2>
+    <p class="login-subtitle">Log in to your account</p>
+
+    <div class="tab-bar">
+        <button class="tab active">Login</button>
+        <button class="tab">Sign Up</button>
+    </div>
+
+    <form id="login-form">
+        <input type="email" name="email" placeholder="Email" required>
+        <input type="password" name="password" placeholder="Password" required>
+
+        <div class="remember-row">
+            <label class="checkbox-label">
+                <input type="checkbox" name="remember" id="remember-me"> Remember me
+            </label>
+            <a href="#" class="forgot-link" id="forgot-password-link">Forgot Password?</a>
+        </div>
+
+        <button type="submit" class="login-button">Login</button>
+
+        <div class="signup-row">
+            Don't have an account? <a href="#" class="signup-link">Sign Up</a>
+        </div>
+    </form>
+
+    <form id="signup-form" style="display: none;">
+        <input type="text" name="first_name" placeholder="First Name" required>
+        <input type="text" name="last_name" placeholder="Last Name" required>
+        <input type="email" name="email" placeholder="Email" required>
+        <input type="password" name="password" placeholder="Password" required>
+        <input type="password" name="confirm_password" placeholder="Confirm Password" required>
+
+        <select name="role" required>
+            <option value="">Select Your Role</option>
+            <option value="guest">Guest</option>
+            <option value="company_admin">Company Admin</option>
+        </select>
+
+        <button type="submit" class="login-button">Sign Up</button>
+
+        <div class="login-row">
+            Already have an account? <a href="#" class="login-link">Login</a>
+        </div>
+    </form>
+
+    <!-- Forgot Password Form -->
+    <form id="forgot-password-form" style="display: none;">
+        <p>Enter your email address below and we'll send you a link to reset your password.</p>
+        <input type="email" name="recovery_email" placeholder="Your Email Address" required>
+        
+        <button type="submit" class="login-button">Reset Password</button>
+        
+        <div class="login-row">
+            <a href="#" class="back-to-login-link">Back to Login</a>
+        </div>
+    </form>
+</div>
+
+</div>
+
+<!-- 2. Fix the Contact Us section layout -->
+<!-- Contact Form Section -->
+<section id="contact" style="padding: 60px; background-color: #ffffff; text-align: center;">
+  <h2>Contact Us</h2>
+  <form id="contact-form" style="max-width: 400px; margin: auto;">
+    <input type="email" name="email" placeholder="Your email" required style="width: 100%; padding: 10px; margin: 5px 0;">
+    <textarea name="message" placeholder="Message" required style="width: 100%; padding: 10px; margin: 5px 0;"></textarea>
+    <button type="submit" style="padding: 10px 20px;">Send</button>
+  </form>
+  <div id="contact-message" style="margin-top: 15px; text-align: center;"></div>
+</section>
+
+
+
+<!-- Footer -->
+<footer style="background-color: #222; color: #fff; text-align: center; padding: 20px;">
+  <p>&copy; 2025 NetDash. All rights reserved.</p>
+  <a href="docs/documentation.pdf" style="color: #0af;">Documentation</a> | 
+  <a href="terms.html" style="color: #0af;">Terms of Use</a>
+</footer>
+
+
+
+    
+    <!-- Login prompt (shown when not logged in) -->
+    <div id="loginPrompt" style="display: none;">
+        <p>Want to leave a review?</p>
+        <p>Please <a href="#" onclick="showLogin()">log in</a> to share your experience with us.</p>
+    </div>
+</section>
+
+<!-- Replace your current reviews section with this one -->
+<section class="customer-reviews-section">
+    <h2>Customer Reviews</h2>
+    <div id="reviewsContainer">
+        <p>Loading reviews...</p>
+    </div>
+</section>
+
+<style>
+/* Styling for the reviews section */
+.customer-reviews-section {
+    max-width: 800px;
+    margin: 30px auto;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+
+.customer-reviews-section h2 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.review-form {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 10px;
+    max-width: 100%;
+    padding-left: 5%;
+    padding-right: 5%;
+}
+
+.review-form input[type="text"] {
+    width: 200px;
+    padding: 8px 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.review-form select {
+    padding: 8px 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+    background-color: white;
+}
+
+.review-form textarea {
+    flex-grow: 1;
+    height: 36px;
+    padding: 8px 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+    resize: none;
+}
+
+.submit-review-btn {
+    padding: 8px 15px;
+    background-color: #3a56e4;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.submit-review-btn:hover {
+    background-color: #2a46d4;
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+    .review-form {
+        flex-direction: column;
+    }
+    
+    .review-form input[type="text"],
+    .review-form select,
+    .review-form textarea {
+        width: 100%;
+    }
+    
+    .submit-review-btn {
+        align-self: flex-start;
+    }
+};
+
+</style>
+
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const reviewsContainer = document.getElementById('reviewsContainer');
+    
+    if (!reviewsContainer) {
+        console.error("Reviews container not found!");
+        return;
+    }
+    
+    // Function to fetch and display reviews with fallback
+    async function loadReviews() {
+        try {
+            // Try to load from API first
+            const response = await fetch('/api/reviews/public')
+                .catch(error => {
+                    throw new Error("Error connecting to server");
+                });
+            
+            let reviews = [];
+            
+            if (response.ok) {
+                try {
+                    reviews = await response.json();
+                    console.log("Successfully loaded reviews from API:", reviews);
+                    
+                    if (reviews && Array.isArray(reviews) && reviews.length > 0) {
+                        displayReviews(reviews);
+                        return;
+                    }
+                } catch (parseError) {
+                    console.error("Error parsing API response:", parseError);
+                }
+            } else {
+                console.error("API request failed:", response.status);
+            }
+            
+            // If we reached here, API request failed or returned no data
+            // Show fallback reviews
+            console.log("Using fallback reviews");
+            showFallbackReviews();
+            
+        } catch (error) {
+            console.error("Error loading reviews:", error);
+            showFallbackReviews();
+        }
+    }
+    
+    // Function to display reviews from API
+    function displayReviews(reviews) {
+        let html = '';
+        reviews.forEach(review => {
+            const rating = review.rating || 5;
+            const stars = '★'.repeat(rating) + '☆'.repeat(5 - rating);
+            const dateDisplay = review.created_at ? new Date(review.created_at).toLocaleDateString() : '';
+            
+            html += `
+                <div class="review-item">
+                    <div class="review-header">
+                        <span class="reviewer-name">${review.name || 'Anonymous'}</span>
+                        <span class="review-date">${dateDisplay}</span>
+                    </div>
+                    <div class="review-rating">${stars}</div>
+                    <div class="review-comment">${review.comment || ''}</div>
+                </div>
+            `;
+        });
+        
+        reviewsContainer.innerHTML = html;
+    }
+    
+
+    
+    // Start loading reviews
+    loadReviews();
+});
+
+
+// Contact form submission
+document.addEventListener('DOMContentLoaded', function() {
+    const contactForm = document.getElementById('contact-form');
+    
+    if (contactForm) {
+        contactForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const emailInput = this.querySelector('input[name="email"]');
+            const messageInput = this.querySelector('textarea[name="message"]');
+            
+            // Get the name from the email (or use a default)
+            const name = emailInput.value.split('@')[0] || 'Contact User';
+            
+            fetch('/api/contact', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    name: name,
+                    email: emailInput.value,
+                    message: messageInput.value
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    alert('Message sent successfully! We\'ll get back to you soon.');
+                    contactForm.reset();
+                } else {
+                    throw new Error(data.message || 'Failed to send message');
+                }
+            })
+            .catch(error => {
+                console.error('Contact submission error:', error);
+                alert('Failed to send message. Please try again or contact us directly.');
+            });
+        });
+    }
+});
+
+
+document.addEventListener('DOMContentLoaded', function() {
+        // Handle OS selection
+        const downloadOptions = document.querySelectorAll('.download-option');
+        
+        downloadOptions.forEach(option => {
+            option.addEventListener('click', function() {
+                // Remove active class from siblings
+                const siblings = this.parentElement.querySelectorAll('.download-option');
+                siblings.forEach(sib => sib.classList.remove('active'));
+                
+                // Add active class to clicked option
+                this.classList.add('active');
+                
+                // Update download button with selected OS
+                const downloadBtn = this.closest('.product-card').querySelector('.btn-download');
+                const os = this.getAttribute('data-os');
+                
+                // Update button text if needed
+                downloadBtn.setAttribute('data-os', os);
+            });
+        });
+        
+        // Handle download button clicks
+        const downloadButtons = document.querySelectorAll('.btn-download');
+        
+        downloadButtons.forEach(button => {
+            button.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                const productCard = this.closest('.product-card');
+                const productTitle = productCard.querySelector('.product-title').textContent;
+                const selectedOS = productCard.querySelector('.download-option.active').getAttribute('data-os');
+                
+                // Show download started message
+                alert(`Download for ${productTitle} (${selectedOS}) has started. Thank you for choosing NetDash!`);
+                
+                // In a real implementation, you would redirect to actual download URL
+                // window.location.href = `/download/${productId}/${selectedOS}`;
+            });
+        });
+    });
+
+
+
+</script>
+
+
+
+</body>
+</html>
