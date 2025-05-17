@@ -1,27 +1,32 @@
-version: "3.9"
+version: '3.8'
 
 services:
-  backend:
-    build: ./Backend
-    ports:
-      - "5000:5000"
-    env_file:
-      - ./Backend/.env
-    depends_on:
-      - mariadb
-
-  mariadb:
-    image: mariadb:10.5
+  db:
+    image: mariadb
     restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: rootpassword
-      MYSQL_DATABASE: product_website
-      MYSQL_USER: root
-      MYSQL_PASSWORD: rootpassword
+      MYSQL_ROOT_PASSWORD: example_root_password
+      MYSQL_DATABASE: netdash
+      MYSQL_USER: netdash_user
+      MYSQL_PASSWORD: netdash_pass
+    volumes:
+      - db_data:/var/lib/mysql
     ports:
       - "3306:3306"
+
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: always
     volumes:
-      - mariadb_data:/var/lib/mysql
+      - ./backend:/app
+    ports:
+      - "5000:5000"
+    environment:
+      - FLASK_ENV=production
+    depends_on:
+      - db
 
 volumes:
-  mariadb_data:
+  db_data:
