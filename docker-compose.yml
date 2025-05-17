@@ -1,35 +1,27 @@
-version: '3.9'
+version: "3.9"
 
 services:
   backend:
-    build:
-      context: ./backend
+    build: ./Backend
     ports:
       - "5000:5000"
     env_file:
-      - ./backend/.env
+      - ./Backend/.env
     depends_on:
       - mariadb
 
-  frontend:
-    image: nginx:alpine
-    volumes:
-      - ./frontend:/usr/share/nginx/html
-    ports:
-      - "80:80"
-
   mariadb:
-    image: mariadb
+    image: mariadb:10.5
     restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: rootpass
-      MYSQL_DATABASE: yourdbname
-      MYSQL_USER: youruser
-      MYSQL_PASSWORD: yourpass
-    volumes:
-      - mariadb_data:/var/lib/mysql
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: product_website
+      MYSQL_USER: root
+      MYSQL_PASSWORD: rootpassword
     ports:
       - "3306:3306"
+    volumes:
+      - mariadb_data:/var/lib/mysql
 
 volumes:
   mariadb_data:
