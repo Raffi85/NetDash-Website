@@ -30,7 +30,31 @@ app.config['SESSION_COOKIE_SAMESITE'] = 'Lax'
 
 @app.route("/")
 def index():
-    return "✅ Flask backend is running!"
+    return send_from_directory('frontend', 'index.html')
+
+@app.route("/admin_dashboard.html")
+def admin_dashboard():
+    return send_from_directory('frontend', 'admin_dashboard.html')
+
+@app.route("/company_dashboard.html")
+def company_dashboard():
+    return send_from_directory('frontend', 'company_dashboard.html')
+
+
+@app.route('/css/<path:filename>')
+def serve_css(filename):
+    return send_from_directory('frontend/css', filename)
+
+@app.route('/js/<path:filename>')
+def serve_js(filename):
+    return send_from_directory('frontend/js', filename)
+
+@app.route('/assets/<path:filename>')
+def serve_assets(filename):
+    return send_from_directory('frontend/assets', filename)
+
+
+
 
 
 # Configure logging
