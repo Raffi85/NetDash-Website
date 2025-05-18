@@ -1,0 +1,8 @@
+services:
+  - type: web
+    name: netdash-backend
+    env: python
+    buildCommand: "pip install -r backend/requirements.txt"
+    startCommand: "gunicorn backend.app:app"
+    envVars:
+      - fromDotEnv: true

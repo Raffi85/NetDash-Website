@@ -17,5 +17,5 @@ ENV FLASK_ENV=production
 # Expose the Flask port
 EXPOSE 5000
 
-# Run the Flask application
-CMD ["flask", "run", "--host=0.0.0.0"]
+# Run the Flask app with Gunicorn (production server)
+CMD ["gunicorn", "app:app", "--bind", "0.0.0.0:5000"]
