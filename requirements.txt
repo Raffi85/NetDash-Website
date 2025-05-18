@@ -1,3 +1,11 @@
-psycopg2-binary
-gunicorn
+flask
+flask-cors
+flask-session
 python-dotenv
+mysql-connector-python
+werkzeug
+gunicorn
+gunicorn
+flask-cors
+python-dotenv
+mysql-connector-python
