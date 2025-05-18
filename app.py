@@ -245,11 +245,6 @@ def update_database_schema():
 def home():
     return send_from_directory('.', 'index.html')
 
-@app.route('/admin_dashboard.html')
-def admin_dashboard():
-    return send_from_directory('.', 'admin_dashboard.html')
-
-
 
 @app.route('/api/logout', methods=['POST'])
 def logout():
