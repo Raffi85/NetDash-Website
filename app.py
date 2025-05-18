@@ -1,7 +1,8 @@
 from flask import Flask, jsonify, request, session, render_template_string, send_from_directory
 from flask_cors import CORS
 from werkzeug.security import generate_password_hash, check_password_hash
-import mysql.connector
+import psycopg2
+import psycopg2.extras
 import secrets
 import json
 import logging
@@ -65,15 +66,17 @@ def admin_required(f):
 # Database connection
 def get_db_connection():
     try:
-        return mysql.connector.connect(
+        return psycopg2.connect(
             host=os.getenv('DB_HOST', 'localhost'),
-            user=os.getenv('DB_USER', 'root'),
-            password=os.getenv('DB_PASSWORD', 'P@ssW0rd'),
-            database=os.getenv('DB_NAME', 'product_website')
+            port=os.getenv('DB_PORT', '5432'),
+            user=os.getenv('DB_USER'),
+            password=os.getenv('DB_PASSWORD'),
+            dbname=os.getenv('DB_NAME')
         )
-    except mysql.connector.Error as err:
+    except psycopg2.Error as err:
         logger.error(f"Database connection error: {err}")
         raise
+
 
 # Initialize database
 def init_db():
@@ -84,16 +87,16 @@ def init_db():
         # Create users table
         cursor.execute('''
         CREATE TABLE IF NOT EXISTS users (
-            id INT AUTO_INCREMENT PRIMARY KEY,
+            id SERIAL PRIMARY KEY,
             email VARCHAR(255) UNIQUE NOT NULL,
             password_hash VARCHAR(255) NOT NULL,
             first_name VARCHAR(100),
             last_name VARCHAR(100),
             name VARCHAR(255),
-            role ENUM('platform_admin', 'company_admin', 'guest') DEFAULT 'guest',
+            role TEXT CHECK (role IN ('platform_admin', 'company_admin', 'guest')) DEFAULT 'guest',
             is_suspended BOOLEAN DEFAULT FALSE,
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-            updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+            updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP 
         )
         ''')
         
@@ -123,7 +126,7 @@ def init_db():
         tables = {
             'plans': '''
                 CREATE TABLE IF NOT EXISTS plans (
-                    id INT AUTO_INCREMENT PRIMARY KEY,
+                    id SERIAL PRIMARY KEY,
                     name VARCHAR(255) NOT NULL,
                     price DECIMAL(10,2) NOT NULL,
                     features JSON,
@@ -133,7 +136,7 @@ def init_db():
             ''',
             'reviews': '''
                 CREATE TABLE IF NOT EXISTS reviews (
-                    id INT AUTO_INCREMENT PRIMARY KEY,
+                    id SERIAL PRIMARY KEY,
                     user_id INT,
                     name VARCHAR(255) NOT NULL,
                     rating INT NOT NULL,
@@ -145,11 +148,11 @@ def init_db():
             ''',
             'contacts': '''
                 CREATE TABLE IF NOT EXISTS contacts (
-                    id INT AUTO_INCREMENT PRIMARY KEY,
+                    id SERIAL PRIMARY KEY,
                     name VARCHAR(255) NOT NULL,
                     email VARCHAR(255) NOT NULL,
                     message TEXT NOT NULL,
-                    status ENUM('new', 'responded', 'closed') DEFAULT 'new',
+                    status TEXT CHECK (status IN ('new', 'responded', 'closed')) DEFAULT 'new',
                     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
                 )
             '''
@@ -171,15 +174,15 @@ def update_database_schema():
     """Update the database schema to add missing columns"""
     try:
         db = get_db_connection()
-        cursor = db.cursor(dictionary=True)
+        cursor = db.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
         
         # Check if user_id column exists in reviews table
         cursor.execute('''
             SELECT COLUMN_NAME 
             FROM INFORMATION_SCHEMA.COLUMNS 
-            WHERE TABLE_SCHEMA = %s 
+            WHERE table_name = 'reviews' 
             AND TABLE_NAME = 'reviews' 
-            AND COLUMN_NAME = 'user_id'
+            AND column_name = 'user_id'
         ''', (os.getenv('DB_NAME', 'product_website'),))
         
         result = cursor.fetchone()
@@ -197,7 +200,7 @@ def update_database_schema():
                 db.commit()
                 
                 logger.info("user_id column and foreign key added successfully")
-            except mysql.connector.Error as e:
+            except psycopg2.Error as e:
                 logger.error(f"Error adding user_id column: {e}")
                 # If there's an error, try to rollback
                 db.rollback()
@@ -286,7 +289,7 @@ def register():
             'message': 'User registered successfully'
         }), 201
     
-    except mysql.connector.IntegrityError as e:
+    except psycopg2.Error as e:
         logger.error(f"Registration integrity error: {e}")
         return jsonify({
             'status': 'error', 
@@ -310,7 +313,7 @@ def register():
 def get_profile():
     try:
         db = get_db_connection()
-        cursor = db.cursor(dictionary=True)
+        cursor = db.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
         
         cursor.execute('SELECT * FROM users WHERE id = %s', (session['user_id'],))
         user = cursor.fetchone()
@@ -337,7 +340,7 @@ def get_profile():
 def get_analytics():
     try:
         db = get_db_connection()
-        cursor = db.cursor(dictionary=True)
+        cursor = db.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
         
         # Get total users
         cursor.execute('SELECT COUNT(*) as count FROM users')
@@ -395,7 +398,7 @@ def get_analytics():
 def get_users():
     try:
         db = get_db_connection()
-        cursor = db.cursor(dictionary=True)
+        cursor = db.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
         
         search_term = request.args.get('search', '')
         
@@ -427,7 +430,7 @@ def get_users():
 def get_user_details(user_id):
     try:
         db = get_db_connection()
-        cursor = db.cursor(dictionary=True)
+        cursor = db.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
         
         cursor.execute('''
             SELECT id, first_name, last_name, email, role, is_suspended, created_at 
@@ -499,7 +502,7 @@ def unsuspend_user(user_id):
 def get_plans():
     try:
         db = get_db_connection()
-        cursor = db.cursor(dictionary=True)
+        cursor = db.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
         
         # For admin view, include all plans with is_active status
         # For company_admin/guest view, only show active plans
@@ -562,7 +565,7 @@ def create_plan():
 def get_reviews():
     try:
         db = get_db_connection()
-        cursor = db.cursor(dictionary=True)
+        cursor = db.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
         
         cursor.execute('SELECT * FROM reviews ORDER BY created_at DESC')
         reviews = cursor.fetchall()
@@ -584,7 +587,7 @@ def get_reviews():
 def get_contacts():
     try:
         db = get_db_connection()
-        cursor = db.cursor(dictionary=True)
+        cursor = db.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
         
         cursor.execute('SELECT * FROM contacts ORDER BY created_at DESC')
         contacts = cursor.fetchall()
@@ -722,7 +725,7 @@ def create_review_by_user():
         
         # Get user info
         db = get_db_connection()
-        cursor = db.cursor(dictionary=True)
+        cursor = db.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
         
         cursor.execute('SELECT name, role FROM users WHERE id = %s', (session['user_id'],))
         user = cursor.fetchone()
@@ -805,7 +808,7 @@ def create_purchase():
 def get_purchases():
     try:
         db = get_db_connection()
-        cursor = db.cursor(dictionary=True)
+        cursor = db.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
         
         cursor.execute('''
             SELECT p.*, u.name as user_name, u.email, pl.name as plan_name 
@@ -864,7 +867,7 @@ def start_demo():
 def access_demo(token):
     try:
         db = get_db_connection()
-        cursor = db.cursor(dictionary=True)
+        cursor = db.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
         
         cursor.execute('''
             SELECT * FROM demo_sessions 
@@ -1220,7 +1223,7 @@ def get_public_reviews():
     """Get all reviews for public display"""
     try:
         db = get_db_connection()
-        cursor = db.cursor(dictionary=True)
+        cursor = db.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
         
         # Simple query without WHERE clause
         cursor.execute('''
@@ -1265,11 +1268,11 @@ def test_database_connection():
         db = get_db_connection()
         results["database_connection"] = True
         
-        cursor = db.cursor(dictionary=True)
+        cursor = db.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
         
         # Check if reviews table exists
         try:
-            cursor.execute("SHOW TABLES LIKE 'reviews'")
+            cursor.execute("SELECT to_regclass('public.reviews')")
             if cursor.fetchone():
                 results["reviews_table_exists"] = True
             else:
@@ -1289,7 +1292,7 @@ def test_database_connection():
                 
             # Check table structure
             try:
-                cursor.execute("DESCRIBE reviews")
+                cursor.execute("SELECT column_name, data_type FROM information_schema.columns WHERE table_name = 'reviews'")
                 columns = cursor.fetchall()
                 results["table_structure"] = [col["Field"] for col in columns]
             except Exception as e:
@@ -1308,8 +1311,9 @@ def test_database_connection():
 
 
     
+# REMOVED OLD MYSQL FUNCTION
 def get_db_connection():
-    return mysql.connector.connect(
+    return psycopg2.connect(
         host=os.getenv('DB_HOST', 'localhost'),
         user=os.getenv('DB_USER', 'root'),
         password=os.getenv('DB_PASSWORD', 'P@ssW0rd'),
@@ -1329,7 +1333,7 @@ def fix_reviews_table_manually():
         cursor.execute('''
             SELECT COLUMN_NAME 
             FROM INFORMATION_SCHEMA.COLUMNS 
-            WHERE TABLE_SCHEMA = %s 
+            WHERE table_name = 'reviews' 
             AND TABLE_NAME = 'reviews' 
             AND COLUMN_NAME = 'is_approved'
         ''', (os.getenv('DB_NAME', 'product_website'),))
@@ -1351,7 +1355,7 @@ def fix_reviews_table_manually():
         print(f"Updated {cursor.rowcount} reviews to be approved.")
         
         print("Checking reviews table structure...")
-        cursor.execute('DESCRIBE reviews')
+        cursor.execute("SELECT column_name, data_type FROM information_schema.columns WHERE table_name = 'reviews' AND table_schema = 'public'")
         columns = cursor.fetchall()
         for col in columns:
             print(f"Column: {col[0]}, Type: {col[1]}, Null: {col[2]}, Key: {col[3]}, Default: {col[4]}")
@@ -1391,7 +1395,7 @@ def request_password_reset():
             return jsonify({'status': 'error', 'message': 'Email is required'}), 400
         
         db = get_db_connection()
-        cursor = db.cursor(dictionary=True)
+        cursor = db.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
         
         # Check if user exists
         cursor.execute('SELECT id, first_name, last_name, name FROM users WHERE email = %s', (email,))
@@ -1545,7 +1549,7 @@ def login():
         remember_me = data.get('remember', False)
         
         db = get_db_connection()
-        cursor = db.cursor(dictionary=True)
+        cursor = db.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
         
         # Find user by email
         cursor.execute('SELECT * FROM users WHERE email = %s', (data['email'],))
@@ -1609,16 +1613,16 @@ def init_db():
         # Create users table
         cursor.execute('''
         CREATE TABLE IF NOT EXISTS users (
-            id INT AUTO_INCREMENT PRIMARY KEY,
+            id SERIAL PRIMARY KEY,
             email VARCHAR(255) UNIQUE NOT NULL,
             password_hash VARCHAR(255) NOT NULL,
             first_name VARCHAR(100),
             last_name VARCHAR(100),
             name VARCHAR(255),
-            role ENUM('platform_admin', 'company_admin', 'guest') DEFAULT 'guest',
+            role TEXT CHECK (role IN ('platform_admin', 'company_admin', 'guest')) DEFAULT 'guest',
             is_suspended BOOLEAN DEFAULT FALSE,
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-            updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+            updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP 
         )
         ''')
         
@@ -1648,7 +1652,7 @@ def init_db():
         tables = {
             'plans': '''
                 CREATE TABLE IF NOT EXISTS plans (
-                    id INT AUTO_INCREMENT PRIMARY KEY,
+                    id SERIAL PRIMARY KEY,
                     name VARCHAR(255) NOT NULL,
                     price DECIMAL(10,2) NOT NULL,
                     features JSON,
@@ -1658,7 +1662,7 @@ def init_db():
             ''',
             'reviews': '''
                 CREATE TABLE IF NOT EXISTS reviews (
-                    id INT AUTO_INCREMENT PRIMARY KEY,
+                    id SERIAL PRIMARY KEY,
                     user_id INT,
                     name VARCHAR(255) NOT NULL,
                     rating INT NOT NULL,
@@ -1670,11 +1674,11 @@ def init_db():
             ''',
             'contacts': '''
                 CREATE TABLE IF NOT EXISTS contacts (
-                    id INT AUTO_INCREMENT PRIMARY KEY,
+                    id SERIAL PRIMARY KEY,
                     name VARCHAR(255) NOT NULL,
                     email VARCHAR(255) NOT NULL,
                     message TEXT NOT NULL,
-                    status ENUM('new', 'responded', 'closed') DEFAULT 'new',
+                    status TEXT CHECK (status IN ('new', 'responded', 'closed')) DEFAULT 'new',
                     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
                 )
             '''
@@ -1692,11 +1696,11 @@ def init_db():
         new_tables = {
             'purchases': '''
                 CREATE TABLE IF NOT EXISTS purchases (
-                    id INT AUTO_INCREMENT PRIMARY KEY,
+                    id SERIAL PRIMARY KEY,
                     user_id INT NOT NULL,
                     plan_id INT NOT NULL,
                     amount DECIMAL(10,2) NOT NULL,
-                    status ENUM('pending', 'completed', 'failed', 'refunded') DEFAULT 'pending',
+                    status TEXT CHECK (status IN ('pending', 'completed', 'failed', 'refunded')) DEFAULT 'pending',
                     purchase_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                     FOREIGN KEY (user_id) REFERENCES users(id),
                     FOREIGN KEY (plan_id) REFERENCES plans(id)
@@ -1704,7 +1708,7 @@ def init_db():
             ''',
             'demo_sessions': '''
                 CREATE TABLE IF NOT EXISTS demo_sessions (
-                    id INT AUTO_INCREMENT PRIMARY KEY,
+                    id SERIAL PRIMARY KEY,
                     token VARCHAR(255) UNIQUE NOT NULL,
                     email VARCHAR(255),
                     expiry_time TIMESTAMP NOT NULL,
@@ -1714,12 +1718,12 @@ def init_db():
             ''',
             'email_config': '''
                 CREATE TABLE IF NOT EXISTS email_config (
-                    id INT AUTO_INCREMENT PRIMARY KEY,
+                    id SERIAL PRIMARY KEY,
                     smtp_server VARCHAR(255) DEFAULT 'smtp.gmail.com',
                     smtp_port INT DEFAULT 587,
                     smtp_username VARCHAR(255),
                     smtp_password VARCHAR(255),
-                    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+                    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP 
                 )
             '''
         }
