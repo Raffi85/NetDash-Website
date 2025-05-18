@@ -36,11 +36,6 @@ def index():
 def admin_dashboard():
     return send_from_directory('frontend', 'admin_dashboard.html')
 
-@app.route("/company_dashboard.html")
-def company_dashboard():
-    return send_from_directory('frontend', 'company_dashboard.html')
-
-
 @app.route('/css/<path:filename>')
 def serve_css(filename):
     return send_from_directory('frontend/css', filename)
