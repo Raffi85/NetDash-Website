@@ -6,7 +6,6 @@ COPY . .
 
 RUN pip install --no-cache-dir -r backend/requirements.txt
 
-# Ensure backend is a package
 RUN touch backend/__init__.py
 
 EXPOSE 10000
