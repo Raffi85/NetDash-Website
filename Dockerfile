@@ -10,4 +10,5 @@ RUN touch backend/__init__.py
 
 EXPOSE 10000
 
-CMD ["gunicorn", "backend.app:app", "--bind", "0.0.0.0:10000"]
+CMD ["gunicorn", "-w", "1", "-b", "0.0.0.0:10000", "app:app"]
+
