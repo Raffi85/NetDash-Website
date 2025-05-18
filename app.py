@@ -27,6 +27,11 @@ app.config['SESSION_COOKIE_HTTPONLY'] = True
 app.config['SESSION_COOKIE_SECURE'] = False  # Set to True in production with HTTPS
 app.config['SESSION_COOKIE_SAMESITE'] = 'Lax'
 
+@app.route("/")
+def index():
+    return "✅ Flask backend is running!"
+
+
 # Configure logging
 logging.basicConfig(
     level=logging.DEBUG,
@@ -1741,10 +1746,10 @@ def init_db():
             db.close()
 
 
+# Initialize DB on startup (for Render/Gunicorn too)
+init_db()
+
+
 if __name__ == '__main__':
-    init_db()
     app.run(debug=False, host='0.0.0.0', port=5000)
 
-@app.route("/")
-def index():
-    return "✅ Flask backend is running!"
