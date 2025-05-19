@@ -30,3 +30,31 @@ function fetchReviews() {
       `).join("");
     });
 }
+
+document.getElementById("reviewForm").addEventListener("submit", async function(e) {
+  e.preventDefault();
+
+  const rating = document.getElementById("rating").value;
+  const comment = document.getElementById("comment").value;
+
+  const response = await fetch("/api/reviews", {
+    method: "POST",
+    credentials: "include", // required for Flask sessions
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({ rating: parseInt(rating), comment })
+  });
+
+  const result = await response.json();
+  const messageBox = document.getElementById("reviewMessage");
+
+  if (response.ok) {
+    messageBox.innerHTML = `<span style="color: green;">${result.message}</span>`;
+    document.getElementById("reviewForm").reset();
+  } else {
+    messageBox.innerHTML = `<span style="color: red;">${result.message}</span>`;
+  }
+});
+
+
