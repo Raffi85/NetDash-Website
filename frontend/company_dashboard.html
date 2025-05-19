@@ -545,52 +545,32 @@
         // Plans and Purchase
         
 function loadPlans() {
-    const container = document.getElementById('plans-container');
-    container.innerHTML = `
-        <div class="price-card">
-            <h3>Basic Tier</h3>
-            <div class="price">$2,500<br><span style="font-size: 1rem;">Every month</span></div>
-            <p>Ideal starting point for small to mid-sized companies.</p>
-            <ul class="features-list">
-                <li><i class="fas fa-check"></i> Up to 100 devices</li>
-                <li><i class="fas fa-check"></i> 30-Day data retention</li>
-                <li><i class="fas fa-check"></i> 3 admin accounts</li>
-                <li><i class="fas fa-check"></i> Standard ML models</li>
-                <li><i class="fas fa-check"></i> Email and chat support</li>
-            </ul>
-            <button class="btn" onclick="openPurchaseModal(101, 'Basic Tier', 2500)">Start Free Trial</button>
-        </div>
-
-        <div class="price-card popular">
-            <h3>Professional Tier</h3>
-            <div class="price">$5,000<br><span style="font-size: 1rem;">Every month</span></div>
-            <p>Ideal for mid-sized to large enterprises.</p>
-            <ul class="features-list">
-                <li><i class="fas fa-check"></i> Up to 500 devices</li>
-                <li><i class="fas fa-check"></i> 90-day data retention</li>
-                <li><i class="fas fa-check"></i> 10 admin accounts</li>
-                <li><i class="fas fa-check"></i> Advanced ML models</li>
-                <li><i class="fas fa-check"></i> Priority support</li>
-            </ul>
-            <button class="btn" onclick="openPurchaseModal(102, 'Professional Tier', 5000)">Select</button>
-        </div>
-
-        <div class="price-card">
-            <h3>Enterprise Tier</h3>
-            <div class="price">$9,000<br><span style="font-size: 1rem;">Every month</span></div>
-            <p>Built for large organizations and security teams.</p>
-            <ul class="features-list">
-                <li><i class="fas fa-check"></i> Unlimited devices</li>
-                <li><i class="fas fa-check"></i> Custom data retention policies</li>
-                <li><i class="fas fa-check"></i> Unlimited admin accounts</li>
-                <li><i class="fas fa-check"></i> Custom ML models</li>
-                <li><i class="fas fa-check"></i> 24/7 dedicated support</li>
-            </ul>
-            <button class="btn" onclick="openPurchaseModal(103, 'Enterprise Tier', 9000)">Select</button>
-        </div>
-    `;
+    fetch('/api/plans')
+        .then(response => response.json())
+        .then(plans => {
+            const container = document.getElementById('plans-container');
+            container.innerHTML = '';
+            plans.forEach(plan => {
+                container.innerHTML += `
+                    <div class="price-card ${plan.name.includes('Professional') ? 'popular' : ''}">
+                        <h3>${plan.name}</h3>
+                        <div class="price">$${plan.price}<br><span style="font-size: 1rem;">Every month</span></div>
+                        <ul class="features-list">
+                            ${(plan.features || []).map(f => `<li><i class="fas fa-check"></i> ${f}</li>`).join('')}
+                        </ul>
+                        <button class="btn" onclick="openPurchaseModal(${plan.id}, '${plan.name}', ${plan.price})">
+                            ${plan.name.includes('Basic') ? 'Start Free Trial' : 'Select'}
+                        </button>
+                    </div>
+                `;
+            });
+        })
+        .catch(error => {
+            console.error('Error loading plans:', error);
+            showAlert('Failed to load plans');
+        });
 }
-            
+     
 
 
         function openPurchaseModal(planId, planName, price) {
