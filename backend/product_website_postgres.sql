@@ -182,10 +182,3 @@ CREATE TABLE IF NOT EXISTS email_config (
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- Insert static pricing plans (if not exists workaround)
-INSERT INTO plans (id, name, price, features, is_active)
-VALUES
-(101, 'Basic Tier', 2500.00, '["Up to 100 devices", "30-Day data retention", "3 admin accounts", "Standard ML models", "Email and chat support"]', TRUE),
-(102, 'Professional Tier', 5000.00, '["Up to 500 devices", "90-day data retention", "10 admin accounts", "Advanced ML models", "Priority support"]', TRUE),
-(103, 'Enterprise Tier', 9000.00, '["Unlimited devices", "Custom data retention policies", "Unlimited admin accounts", "Custom ML models", "24/7 dedicated support"]', TRUE)
-ON CONFLICT (id) DO NOTHING;
