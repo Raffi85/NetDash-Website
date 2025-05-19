@@ -779,18 +779,18 @@ def create_purchase():
         cursor = db.cursor()
         
         # Create purchase record
-        cursor.execute('''
-            INSERT INTO purchases (user_id, plan_id, amount, status, purchase_date) 
-            VALUES (%s, %s, %s, %s, %s)
-        ''', (
+        cursor.execute("""
+           INSERT INTO purchases (user_id, plan_id, amount, status, purchase_date) 
+           VALUES (%s, %s, %s, %s, %s)
+           RETURNING id
+        """, (
             session['user_id'], 
             data['plan_id'], 
             data['amount'], 
-            'pending', 
+             'pending', 
             datetime.now()
         ))
-        
-        purchase_id = cursor.lastrowid
+        purchase_id = cursor.fetchone()[0]
         db.commit()
         
         # Send email notification but don't let failures affect the response
