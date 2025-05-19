@@ -1064,7 +1064,7 @@ def company_dashboard():
     # Check if user is company_admin
     if session.get('user_role') != 'company_admin':
         return jsonify({'status': 'error', 'message': 'Access denied'}), 403
-    return send_from_directory('.', 'company_dashboard.html')
+    return send_from_directory('frontend', 'company_dashboard.html')
 
 # Route for company admins to access after login
 @app.route('/api/redirect-after-login', methods=['GET'])
