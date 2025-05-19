@@ -512,38 +512,42 @@ def unsuspend_user(user_id):
 
 # Plans Routes
 @app.route('/api/plans', methods=['GET'])
-@login_required  # Change from @admin_required to @login_required
+@login_required
 def get_plans():
     try:
         db = get_db_connection()
         cursor = db.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
-        
-        # For admin view, include all plans with is_active status
-        # For company_admin/guest view, only show active plans
+
         if session.get('user_role') == 'platform_admin':
             cursor.execute('SELECT * FROM plans')
         else:
             cursor.execute('SELECT * FROM plans WHERE is_active = TRUE')
-        
+
         plans = cursor.fetchall()
-        
-        # Parse JSON features
+
+        # ✅ Ensure 'features' is a list before sending to frontend
         for plan in plans:
-            if plan['features']:
+            features = plan.get('features')
+            if isinstance(features, str):
                 try:
-                    plan['features'] = json.loads(plan['features'])
+                    plan['features'] = json.loads(features)
                 except:
                     plan['features'] = []
-        
+            elif isinstance(features, list):
+                plan['features'] = features
+            else:
+                plan['features'] = []
+
         return jsonify(plans), 200
-    
+
     except Exception as e:
         logger.error(f"Plans error: {e}")
         return jsonify({'status': 'error', 'message': 'An unexpected error occurred'}), 500
-    
+
     finally:
         if 'db' in locals():
             db.close()
+
 
 @app.route('/api/plans', methods=['POST'])
 @admin_required
