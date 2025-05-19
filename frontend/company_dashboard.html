@@ -554,12 +554,14 @@ function loadPlans() {
             container.innerHTML = '';
 
             plans.forEach(plan => {
-                // Parse features JSON
-                const features = Array.isArray(plan.features)
-                    ? plan.features
-                    : typeof plan.features === 'string'
-                        ? JSON.parse(plan.features)
-                        : [];
+                let features = [];
+                try {
+                    features = Array.isArray(plan.features)
+                        ? plan.features
+                        : JSON.parse(plan.features);
+                } catch (err) {
+                    features = [];
+                }
 
                 const featuresList = features.map(f => `<li><i class="fas fa-check"></i> ${f}</li>`).join('');
 
@@ -582,6 +584,7 @@ function loadPlans() {
             showAlert('Failed to load plans. Please try again.');
         });
 }
+
 
 
 
