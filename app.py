@@ -348,6 +348,7 @@ def get_profile():
         if 'db' in locals():
             db.close()
 
+
 # Analytics Routes
 @app.route('/api/analytics', methods=['GET'])
 @admin_required
@@ -355,40 +356,36 @@ def get_analytics():
     try:
         db = get_db_connection()
         cursor = db.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
-        
+
         # Get total users
         cursor.execute('SELECT COUNT(*) as count FROM users')
         total_users = cursor.fetchone()['count']
-        
+
         # Get active subscriptions (counting completed purchases)
         cursor.execute('''
             SELECT COUNT(*) as count FROM purchases 
             WHERE status = 'completed'
         ''')
         completed_subscriptions = cursor.fetchone()['count']
-        
+
         # Get pending subscriptions (counting pending purchases)
         cursor.execute('''
             SELECT COUNT(*) as count FROM purchases 
             WHERE status = 'pending'
         ''')
         pending_subscriptions = cursor.fetchone()['count']
-        
+
         # Calculate active subscriptions (you can decide whether to include pending ones)
-        # Option 1: Count only completed as active
-        # active_subscriptions = completed_subscriptions
-        
-        # Option 2: Count both pending and completed as active
         active_subscriptions = completed_subscriptions + pending_subscriptions
-        
+
         # Get total reviews
         cursor.execute('SELECT COUNT(*) as count FROM reviews')
         total_reviews = cursor.fetchone()['count']
-        
-        # Get pending contacts
-        cursor.execute('SELECT COUNT(*) as count FROM contacts WHERE status = "new"')
+
+        # ✅ Fixed: Use single quotes for string literal in PostgreSQL
+        cursor.execute("SELECT COUNT(*) as count FROM contacts WHERE status = 'new'")
         pending_contacts = cursor.fetchone()['count']
-        
+
         return jsonify({
             'total_users': total_users,
             'active_subscriptions': active_subscriptions,
@@ -397,14 +394,15 @@ def get_analytics():
             'total_reviews': total_reviews,
             'pending_contacts': pending_contacts
         }), 200
-    
+
     except Exception as e:
         logger.error(f"Analytics error: {e}")
         return jsonify({'status': 'error', 'message': 'An unexpected error occurred'}), 500
-    
+
     finally:
         if 'db' in locals():
             db.close()
+
 
 # User Management Routes
 @app.route('/api/users', methods=['GET'])
