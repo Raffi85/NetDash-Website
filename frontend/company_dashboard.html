@@ -520,23 +520,25 @@
             });
         }
 
-        function startDemoCountdown(expiryTime) {
-            demoInterval = setInterval(() => {
-                const now = new Date();
-                const timeLeft = expiryTime - now;
-                
-                if (timeLeft <= 0) {
-                    clearInterval(demoInterval);
-                    document.getElementById('demo-time').textContent = 'Expired';
-                    showAlert('Demo has expired', 'error');
-                    return;
-                }
-                
-                const minutes = Math.floor(timeLeft / 60000);
-                const seconds = Math.floor((timeLeft % 60000) / 1000);
-                document.getElementById('demo-time').textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
-            }, 1000);
+function startDemoCountdown(expiryISO) {
+    const expiryTime = new Date(expiryISO); // parse ISO string directly
+    demoInterval = setInterval(() => {
+        const now = new Date(); // current time in local timezone
+        const timeLeft = expiryTime.getTime() - now.getTime();
+
+        if (timeLeft <= 0) {
+            clearInterval(demoInterval);
+            document.getElementById('demo-time').textContent = 'Expired';
+            showAlert('Demo has expired', 'error');
+            return;
         }
+
+        const minutes = Math.floor(timeLeft / 60000);
+        const seconds = Math.floor((timeLeft % 60000) / 1000);
+        document.getElementById('demo-time').textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+    }, 1000);
+}
+
 
         function accessDemoFeature(feature) {
             showAlert(`Demo feature "${feature}" accessed! In a real implementation, this would show the actual feature.`, 'success');
@@ -550,27 +552,37 @@ function loadPlans() {
         .then(plans => {
             const container = document.getElementById('plans-container');
             container.innerHTML = '';
+
             plans.forEach(plan => {
-                container.innerHTML += `
+                // Parse features JSON
+                const features = Array.isArray(plan.features)
+                    ? plan.features
+                    : typeof plan.features === 'string'
+                        ? JSON.parse(plan.features)
+                        : [];
+
+                const featuresList = features.map(f => `<li><i class="fas fa-check"></i> ${f}</li>`).join('');
+
+                const planCard = `
                     <div class="price-card ${plan.name.includes('Professional') ? 'popular' : ''}">
                         <h3>${plan.name}</h3>
-                        <div class="price">$${plan.price}<br><span style="font-size: 1rem;">Every month</span></div>
-                        <ul class="features-list">
-                            ${(plan.features || []).map(f => `<li><i class="fas fa-check"></i> ${f}</li>`).join('')}
-                        </ul>
+                        <div class="price">$${plan.price.toLocaleString()}<br><span style="font-size: 1rem;">Every month</span></div>
+                        <ul class="features-list">${featuresList}</ul>
                         <button class="btn" onclick="openPurchaseModal(${plan.id}, '${plan.name}', ${plan.price})">
                             ${plan.name.includes('Basic') ? 'Start Free Trial' : 'Select'}
                         </button>
                     </div>
                 `;
+
+                container.innerHTML += planCard;
             });
         })
         .catch(error => {
-            console.error('Error loading plans:', error);
-            showAlert('Failed to load plans');
+            console.error('Failed to load plans:', error);
+            showAlert('Failed to load plans. Please try again.');
         });
 }
-     
+
 
 
         function openPurchaseModal(planId, planName, price) {
