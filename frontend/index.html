@@ -950,11 +950,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     } else if (data.user.role === 'company_admin') {
                         window.location.href = '/company_dashboard.html';
                     } else {
-                        // For guests, stay on main page but close modal
-                        toggleModal(false);
-                        alert('Login successful!');
-                        // Update UI for logged-in guest users
-                        updateUIForLoggedInUser(data.user);
+                        window.location.href = '/guest_dashboard.html';
                     }
                 } else {
                     throw new Error(data.message || 'Login failed');

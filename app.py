@@ -356,10 +356,6 @@ def guest_dashboard():
     return send_from_directory('frontend', 'guest_dashboard.html')
 
 
-
-
-
-
 # Analytics Routes
 @app.route('/api/analytics', methods=['GET'])
 @admin_required
