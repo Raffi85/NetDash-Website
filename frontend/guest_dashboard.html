@@ -16,6 +16,18 @@
       color: white;
       padding: 1rem;
       text-align: center;
+      position: relative;
+    }
+    header button {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      background: #dc3545;
+      color: white;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 4px;
+      cursor: pointer;
     }
     .container {
       max-width: 800px;
@@ -55,20 +67,62 @@
       color: #007bff;
       font-weight: bold;
     }
+    .demo-section {
+      background: linear-gradient(135deg, #3a56e4 0%, #8a9ff9 100%);
+      color: white;
+      padding: 2rem;
+      border-radius: 8px;
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+    .demo-countdown {
+      background-color: #fff3cd;
+      border: 1px solid #ffeaa7;
+      padding: 1rem;
+      border-radius: 4px;
+      text-align: center;
+      margin-top: 1rem;
+      color: #333;
+    }
   </style>
 </head>
 <body>
   <header>
-  <h1>Welcome Guest!</h1>
-  <button id="logoutBtn" style="position: absolute; top: 1rem; right: 1rem; background: #dc3545; color: white; border: none; padding: 0.5rem 1rem; border-radius: 4px; cursor: pointer;">
-    Logout
-  </button>
-</header>
-
+    <h1>Welcome Guest!</h1>
+    <button id="logoutBtn">Logout</button>
+  </header>
 
   <div class="container">
     <h2>Explore NetDash</h2>
     <p>You are currently browsing as a guest. You can explore the features and leave a review based on your demo experience.</p>
+
+    <div class="demo-section">
+      <h2>Try Our Interactive Demo</h2>
+      <p>Experience NetDash features without any commitment</p>
+      <div id="demo-form">
+        <div class="form-group">
+          <input type="email" id="demo-email" placeholder="Enter your email (optional)">
+        </div>
+        <button class="btn" onclick="startDemo()">Start Demo</button>
+      </div>
+      <div id="demo-active" style="display: none;">
+        <div class="demo-countdown">
+          <h3>Demo Active</h3>
+          <p>Time remaining: <span id="demo-time"></span></p>
+        </div>
+        <div class="card">
+          <h3>Demo Features Available:</h3>
+          <ul>
+            <li>Real-time monitoring dashboard</li>
+            <li>Basic threat detection</li>
+            <li>Sample analytics</li>
+          </ul>
+          <button class="btn" onclick="accessDemoFeature('monitoring')">View Monitoring</button>
+          <button class="btn" onclick="accessDemoFeature('threats')">Threat Detection</button>
+          <button class="btn" onclick="accessDemoFeature('analytics')">Analytics</button>
+        </div>
+      </div>
+    </div>
 
     <h3>Leave a Review</h3>
     <form id="reviewForm" class="review-form">
@@ -115,29 +169,66 @@
       }
     });
 
-     
-    // Logout functionality
-document.getElementById('logoutBtn').addEventListener('click', async () => {
-  try {
-    const res = await fetch('/api/logout', {
-      method: 'POST',
-      credentials: 'include'
+    document.getElementById('logoutBtn').addEventListener('click', async () => {
+      try {
+        const res = await fetch('/api/logout', {
+          method: 'POST',
+          credentials: 'include'
+        });
+
+        if (res.ok) {
+          window.location.href = '/index.html';
+        } else {
+          const result = await res.json();
+          alert(result.message || 'Logout failed');
+        }
+      } catch (error) {
+        alert('Error logging out');
+        console.error(error);
+      }
     });
 
-    if (res.ok) {
-      window.location.href = '/index.html';
-    } else {
-      const result = await res.json();
-      alert(result.message || 'Logout failed');
+    function startDemo() {
+      const email = document.getElementById('demo-email').value;
+
+      fetch('/api/demo/start', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ email })
+      })
+        .then(res => res.json())
+        .then(data => {
+          if (data.status === 'success') {
+            document.getElementById('demo-form').style.display = 'none';
+            document.getElementById('demo-active').style.display = 'block';
+            startDemoCountdown(new Date(data.expiry_time));
+          } else {
+            alert(data.message || 'Failed to start demo.');
+          }
+        })
+        .catch(() => alert('Failed to start demo.'));
     }
-  } catch (error) {
-    alert('Error logging out');
-    console.error(error);
-  }
-});
 
+    function startDemoCountdown(expiryTime) {
+      const interval = setInterval(() => {
+        const now = new Date();
+        const distance = expiryTime - now;
+        if (distance < 0) {
+          clearInterval(interval);
+          document.getElementById('demo-time').textContent = 'Expired';
+          return;
+        }
+        const minutes = Math.floor(distance / 60000);
+        const seconds = Math.floor((distance % 60000) / 1000);
+        document.getElementById('demo-time').textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+      }, 1000);
+    }
 
-
+    function accessDemoFeature(name) {
+      alert(`Accessing demo feature: ${name}`);
+    }
   </script>
 </body>
 </html>

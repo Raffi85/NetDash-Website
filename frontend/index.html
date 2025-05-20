@@ -1909,13 +1909,11 @@ document.addEventListener('DOMContentLoaded', function() {
   <div id="contact-message" style="margin-top: 15px; text-align: center;"></div>
 </section>
 
-<!-- Login prompt (shown when not logged in) -->
-    <div id="loginPrompt" style="display: none;">
-        <p>Want to leave a review?</p>
-        <p>Please <a href="#" onclick="showLogin()">log in</a> to share your experience with us.</p>
-    </div>
-</section>
-
+<!-- Login prompt for guest users only -->
+<div id="loginPrompt" style="display: none;">
+  <p>Want to leave a review?</p>
+  <p>Please <a href="#" onclick="showLogin()">log in</a> to share your experience with us.</p>
+</div>
 
 
 
@@ -2184,6 +2182,31 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         });
     });
+
+
+
+  async function checkAuthStatus() {
+    try {
+      const res = await fetch('/api/check-auth');
+      const result = await res.json();
+
+      // Only show login prompt if not logged in
+      if (!result.authenticated) {
+        document.getElementById('loginPrompt').style.display = 'block';
+      }
+    } catch (error) {
+      console.error('Error checking auth status:', error);
+      document.getElementById('loginPrompt').style.display = 'block';
+    }
+  }
+
+  function showLogin() {
+    window.location.href = '/login.html';  // or open modal if you have one
+  }
+
+  window.addEventListener('DOMContentLoaded', checkAuthStatus);
+
+
 
 
 
