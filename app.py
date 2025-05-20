@@ -28,9 +28,6 @@ app.config['SESSION_COOKIE_HTTPONLY'] = True
 app.config['SESSION_COOKIE_SECURE'] = False  # Set to True in production with HTTPS
 app.config['SESSION_COOKIE_SAMESITE'] = 'Lax'
 
-@app.route("/")
-def index():
-    return send_from_directory('frontend', 'index.html')
 
 @app.route("/admin_dashboard.html")
 def admin_dashboard():
@@ -237,8 +234,10 @@ def update_database_schema():
 
 # Routes
 @app.route('/')
-def home():
-    return send_from_directory('.', 'index.html')
+@app.route('/index.html')
+def index():
+    return send_from_directory('frontend', 'index.html')
+
 
 
 @app.route('/api/logout', methods=['POST'])
