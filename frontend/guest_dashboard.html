@@ -59,8 +59,12 @@
 </head>
 <body>
   <header>
-    <h1>Welcome Guest!</h1>
-  </header>
+  <h1>Welcome Guest!</h1>
+  <button id="logoutBtn" style="position: absolute; top: 1rem; right: 1rem; background: #dc3545; color: white; border: none; padding: 0.5rem 1rem; border-radius: 4px; cursor: pointer;">
+    Logout
+  </button>
+</header>
+
 
   <div class="container">
     <h2>Explore NetDash</h2>
@@ -110,6 +114,30 @@
         alert(result.message || 'Something went wrong.');
       }
     });
+
+     
+    // Logout functionality
+document.getElementById('logoutBtn').addEventListener('click', async () => {
+  try {
+    const res = await fetch('/api/logout', {
+      method: 'POST',
+      credentials: 'include'
+    });
+
+    if (res.ok) {
+      window.location.href = '/index.html';
+    } else {
+      const result = await res.json();
+      alert(result.message || 'Logout failed');
+    }
+  } catch (error) {
+    alert('Error logging out');
+    console.error(error);
+  }
+});
+
+
+
   </script>
 </body>
 </html>
