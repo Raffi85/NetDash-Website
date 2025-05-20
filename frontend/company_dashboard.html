@@ -605,32 +605,41 @@ function loadPlans() {
         }
 
         function confirmPurchase() {
-            if (!selectedPlan) return;
-            
-            fetch('/api/purchase', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    plan_id: selectedPlan.id,
-                    amount: selectedPlan.price
-                })
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.status === 'success') {
-                    showAlert('Purchase initiated successfully! You will receive a confirmation email shortly.', 'success');
-                    closePurchaseModal();
-                } else {
-                    showAlert(data.message);
-                }
-            })
-            .catch(error => {
-                console.error('Purchase error:', error);
-                showAlert('Failed to process purchase. Please try again.');
-            });
+    if (!selectedPlan) return;
+    
+    fetch('/api/purchase', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            plan_id: selectedPlan.id,
+            amount: selectedPlan.price
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.status === 'success') {
+            showAlert('Purchase completed! You can now download the app.', 'success');
+            closePurchaseModal();
+
+            // Show download button
+            const downloadBtn = document.createElement('a');
+            downloadBtn.href = "https://github.com/CheeseBaconWaffles/NetDash/archive/refs/heads/main.zip"; // <- Update with your actual zip URL if needed
+            downloadBtn.className = "btn";
+            downloadBtn.download = true;
+            downloadBtn.textContent = "Download NetDash App";
+            document.getElementById('purchase-section').appendChild(downloadBtn);
+        } else {
+            showAlert(data.message);
         }
+    })
+    .catch(error => {
+        console.error('Purchase error:', error);
+        showAlert('Failed to process purchase. Please try again.');
+    });
+}
+
 
         // Reviews
         document.getElementById('review-form').addEventListener('submit', function(e) {
