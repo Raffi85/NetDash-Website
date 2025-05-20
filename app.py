@@ -348,6 +348,17 @@ def get_profile():
         if 'db' in locals():
             db.close()
 
+@app.route('/guest_dashboard.html')
+@login_required
+def guest_dashboard():
+    if session.get('user_role') != 'guest':
+        return jsonify({'status': 'error', 'message': 'Access denied'}), 403
+    return send_from_directory('frontend', 'guest_dashboard.html')
+
+
+
+
+
 
 # Analytics Routes
 @app.route('/api/analytics', methods=['GET'])
@@ -1078,6 +1089,8 @@ def redirect_after_login():
         return jsonify({'redirect': '/admin_dashboard.html'}), 200
     elif user_role == 'company_admin':
         return jsonify({'redirect': '/company_dashboard.html'}), 200
+    elif user_role == 'guest':
+        return jsonify({'redirect': '/guest_dashboard.html'}), 200
     else:
         return jsonify({'redirect': '/'}), 200
 

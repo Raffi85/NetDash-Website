@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Guest Dashboard - NetDash</title>
+  <link rel="stylesheet" href="/css/style.css" />
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      background: #f8f9fa;
+    }
+    header {
+      background: #343a40;
+      color: white;
+      padding: 1rem;
+      text-align: center;
+    }
+    .container {
+      max-width: 800px;
+      margin: 2rem auto;
+      background: white;
+      padding: 2rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+    h2 {
+      margin-top: 0;
+    }
+    .review-form {
+      display: flex;
+      flex-direction: column;
+    }
+    .review-form textarea,
+    .review-form select {
+      margin-bottom: 1rem;
+      padding: 0.5rem;
+      font-size: 1rem;
+    }
+    .review-form button {
+      background: #007bff;
+      color: white;
+      border: none;
+      padding: 0.6rem 1.2rem;
+      cursor: pointer;
+      border-radius: 4px;
+    }
+    .cta {
+      margin-top: 2rem;
+      text-align: center;
+    }
+    .cta a {
+      text-decoration: none;
+      color: #007bff;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Welcome Guest!</h1>
+  </header>
+
+  <div class="container">
+    <h2>Explore NetDash</h2>
+    <p>You are currently browsing as a guest. You can explore the features and leave a review based on your demo experience.</p>
+
+    <h3>Leave a Review</h3>
+    <form id="reviewForm" class="review-form">
+      <select name="rating" required>
+        <option value="">Rate Us</option>
+        <option value="5">⭐⭐⭐⭐⭐</option>
+        <option value="4">⭐⭐⭐⭐</option>
+        <option value="3">⭐⭐⭐</option>
+        <option value="2">⭐⭐</option>
+        <option value="1">⭐</option>
+      </select>
+      <textarea name="comment" rows="4" placeholder="Write your feedback here..." required></textarea>
+      <button type="submit">Submit Review</button>
+    </form>
+
+    <div class="cta">
+      <p>Want full access? <a href="/index.html">Subscribe now</a></p>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById('reviewForm').addEventListener('submit', async function (e) {
+      e.preventDefault();
+      const formData = new FormData(this);
+      const data = {
+        rating: parseInt(formData.get('rating')),
+        comment: formData.get('comment')
+      };
+
+      const res = await fetch('/api/reviews', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+      });
+
+      const result = await res.json();
+      if (res.ok) {
+        alert('Review submitted successfully!');
+        this.reset();
+      } else {
+        alert(result.message || 'Something went wrong.');
+      }
+    });
+  </script>
+</body>
+</html>
