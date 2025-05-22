@@ -771,6 +771,31 @@
     color: #3a56e4;
 }
 
+.doc-expandable {
+  background: #fff;
+  margin-bottom: 1rem;
+  padding: 1rem;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+}
+
+.doc-expandable summary {
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  list-style: none;
+}
+
+.doc-expandable summary::marker {
+  display: none;
+}
+
+.doc-expandable .doc-text {
+  margin-top: 1rem;
+  padding-left: 1rem;
+  color: #555;
+}
+
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
@@ -1741,34 +1766,73 @@ document.addEventListener('DOMContentLoaded', function() {
             
             <div class="doc-content">
                 <div class="doc-links">
-                    <div class="doc-link-card">
-                        <div class="doc-link-icon"><i class="fas fa-book"></i></div>
-                        <h4>Getting Started Guide</h4>
-                        <p>Learn the basics of NetDash installation, configuration, and usage.</p>
-                        <a href="#" class="doc-link">View Guide <i class="fas fa-arrow-right"></i></a>
-                    </div>
-                    
-                    <div class="doc-link-card">
-                        <div class="doc-link-icon"><i class="fas fa-graduation-cap"></i></div>
-                        <h4>Tutorials</h4>
-                        <p>Step-by-step tutorials covering common security tasks and workflows.</p>
-                        <a href="#" class="doc-link">View Tutorials <i class="fas fa-arrow-right"></i></a>
-                    </div>
-                    
-                    <div class="doc-link-card">
-                        <div class="doc-link-icon"><i class="fas fa-file-code"></i></div>
-                        <h4>API Documentation</h4>
-                        <p>Detailed API reference for developers and integrators.</p>
-                        <a href="#" class="doc-link">View API Docs <i class="fas fa-arrow-right"></i></a>
-                    </div>
-                    
-                    <div class="doc-link-card">
-                        <div class="doc-link-icon"><i class="fas fa-cube"></i></div>
-                        <h4>Feature Guides</h4>
-                        <p>Detailed explanations of NetDash features and capabilities.</p>
-                        <a href="#" class="doc-link">View Features <i class="fas fa-arrow-right"></i></a>
-                    </div>
-                </div>
+  <!-- Getting Started Guide -->
+  <details class="doc-expandable" open>
+    <summary><strong>📘 Getting Started Guide</strong> – Install & Launch</summary>
+    <div class="doc-text">
+      <p><strong>Step 1: Installation</strong><br>
+      Download NetDash for your operating system and run the installer.</p>
+
+      <p><strong>Step 2: Initial Configuration</strong><br>
+      Set up your admin account, connect traffic sources like Zeek or Snort, and configure thresholds or alert types.</p>
+
+      <p><strong>Step 3: Start Monitoring</strong><br>
+      Launch the dashboard to begin monitoring traffic, viewing alerts, and tracking system metrics.</p>
+    </div>
+  </details>
+
+  <!-- Tutorials -->
+  <details class="doc-expandable">
+    <summary><strong>🎓 Tutorials</strong> – Use NetDash Effectively</summary>
+    <div class="doc-text">
+      <p><strong>Tutorial 1: Real-Time Monitoring</strong><br>
+      Visualize live traffic and filter suspicious patterns using the dashboard graphs and analytics panel.</p>
+
+      <p><strong>Tutorial 2: Handling Alerts</strong><br>
+      Navigate to the Alerts tab → View details → Dismiss or mark as resolved based on risk level.</p>
+
+      <p><strong>Tutorial 3: Training the ML Model</strong><br>
+      Upload labeled log data from your environment → Click “Train Model” → Review accuracy metrics.</p>
+
+      <p><strong>Tutorial 4: Adding Devices</strong><br>
+      Go to “Devices” section → Add new host/IP → Assign sensors or IDS engines.</p>
+    </div>
+  </details>
+
+  <!-- API Documentation -->
+  <details class="doc-expandable">
+    <summary><strong>🧾 API Documentation</strong> – Developer Reference</summary>
+    <div class="doc-text">
+      <p><strong>Authentication:</strong><br>
+      Use Bearer token in headers: <code>Authorization: Bearer &lt;your_token&gt;</code></p>
+
+      <ul>
+        <li><code>GET /api/logs</code> – Retrieve latest logs</li>
+        <li><code>POST /api/predict</code> – Send data for prediction</li>
+        <li><code>GET /api/alerts</code> – List triggered alerts</li>
+        <li><code>POST /api/retrain</code> – Start training a new model</li>
+      </ul>
+
+      <p><strong>Sample curl:</strong><br>
+      <code>curl -H "Authorization: Bearer TOKEN" https://yourdomain.com/api/alerts</code></p>
+    </div>
+  </details>
+
+  <!-- Feature Guides -->
+  <details class="doc-expandable">
+    <summary><strong>📦 Feature Guides</strong> – Explore Capabilities</summary>
+    <div class="doc-text">
+      <ul>
+        <li><strong>ML-Based Anomaly Detection:</strong> Identifies outliers in traffic based on historical trends.</li>
+        <li><strong>Alerting System:</strong> Risk-based severity alerts with timestamps and device info.</li>
+        <li><strong>Report Generation:</strong> Generate compliance-ready reports in PDF/CSV.</li>
+        <li><strong>Admin Panel:</strong> Manage users, audit logs, retention settings, and backups.</li>
+        <li><strong>Integration Support:</strong> Compatible with Zeek, Snort, Suricata, and REST APIs.</li>
+      </ul>
+    </div>
+  </details>
+</div>
+
             </div>
         </div>
     </section>
