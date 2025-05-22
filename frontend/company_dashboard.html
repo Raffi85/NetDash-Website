@@ -1,224 +1,700 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Company Dashboard - NetDash</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-  <style>
-    :root {
-      --primary-color: #3a56e4;
-      --secondary-color: #6c757d;
-      --bg-color: #f4f6f9;
-      --card-bg: #ffffff;
-      --text-color: #333;
-    }
-    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-    body { background-color: var(--bg-color); color: var(--text-color); line-height: 1.6; }
-    .dashboard-container { display: grid; grid-template-columns: 250px 1fr; min-height: 100vh; }
-    .sidebar { background-color: var(--primary-color); color: white; padding: 2rem 0; }
-    .sidebar-logo { text-align: center; margin-bottom: 2rem; font-size: 1.8rem; font-weight: bold; }
-    .sidebar-menu { list-style: none; }
-    .sidebar-menu li { padding: 1rem 2rem; cursor: pointer; transition: background-color 0.3s; }
-    .sidebar-menu li:hover, .sidebar-menu li.active { background-color: rgba(255,255,255,0.1); }
-    .sidebar-menu li a { color: white; text-decoration: none; display: flex; align-items: center; }
-    .sidebar-menu li i { margin-right: 1rem; }
-    .main-content { padding: 2rem; }
-    .dashboard-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; }
-    .card { background-color: var(--card-bg); border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); padding: 1.5rem; margin-bottom: 1.5rem; }
-    .btn { padding: 0.5rem 1rem; background-color: var(--primary-color); color: white; border: none; border-radius: 4px; cursor: pointer; text-decoration: none; display: inline-block; }
-    .btn:hover { background-color: #2a46d4; }
-    .features-list { list-style: none; padding: 0; margin: 1rem 0; }
-    .features-list li { padding: 0.5rem 0; }
-    .features-list li i { color: #28a745; margin-right: 0.5rem; }
-    .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); }
-    .modal-content { background-color: white; margin: 15% auto; padding: 2rem; border-radius: 8px; width: 90%; max-width: 500px; position: relative; }
-    .close { color: #aaa; position: absolute; top: 10px; right: 15px; font-size: 28px; font-weight: bold; cursor: pointer; }
-    .close:hover { color: black; }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Company Dashboard - NetDash</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #3a56e4;
+            --secondary-color: #6c757d;
+            --bg-color: #f4f6f9;
+            --card-bg: #ffffff;
+            --text-color: #333;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+
+        .dashboard-container {
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 2rem 0;
+        }
+
+        .sidebar-logo {
+            text-align: center;
+            margin-bottom: 2rem;
+            font-size: 1.8rem;
+            font-weight: bold;
+        }
+
+        .sidebar-menu {
+            list-style: none;
+        }
+
+        .sidebar-menu li {
+            padding: 1rem 2rem;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .sidebar-menu li:hover, .sidebar-menu li.active {
+            background-color: rgba(255,255,255,0.1);
+        }
+
+        .sidebar-menu li a {
+            color: white;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+        }
+
+        .sidebar-menu li i {
+            margin-right: 1rem;
+        }
+
+        .main-content {
+            padding: 2rem;
+        }
+
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .card {
+            background-color: var(--card-bg);
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .btn {
+            padding: 0.5rem 1rem;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn:hover {
+            background-color: #2a46d4;
+        }
+
+        .btn-secondary {
+            background-color: var(--secondary-color);
+        }
+
+        .btn-danger {
+            background-color: #dc3545;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        .form-group input, .form-group textarea, .form-group select {
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+
+        .demo-section {
+            background: linear-gradient(135deg, #3a56e4 0%, #8a9ff9 100%);
+            color: white;
+            padding: 2rem;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .price-card {
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1rem;
+            text-align: center;
+            transition: transform 0.3s;
+        }
+
+        .price-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary-color);
+        }
+
+        .price-card.popular {
+            border-color: var(--primary-color);
+            position: relative;
+        }
+
+        .price-card.popular::before {
+            content: 'POPULAR';
+            position: absolute;
+            top: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: var(--primary-color);
+            color: white;
+            padding: 0.25rem 1rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+        }
+
+        .price {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--primary-color);
+            margin: 1rem 0;
+        }
+
+        .features-list {
+            list-style: none;
+            padding: 0;
+            margin: 1rem 0;
+        }
+
+        .features-list li {
+            padding: 0.5rem 0;
+        }
+
+        .features-list li i {
+            color: #28a745;
+            margin-right: 0.5rem;
+        }
+
+        .review-form {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .rating-input {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .rating-input select {
+            width: auto;
+            margin-left: 1rem;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+        }
+
+        .modal-content {
+            background-color: white;
+            margin: 15% auto;
+            padding: 2rem;
+            border-radius: 8px;
+            width: 90%;
+            max-width: 500px;
+            position: relative;
+        }
+
+        .close {
+            color: #aaa;
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close:hover {
+            color: black;
+        }
+
+        .demo-countdown {
+            background-color: #fff3cd;
+            border: 1px solid #ffeaa7;
+            padding: 1rem;
+            border-radius: 4px;
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+
+        .alert {
+            padding: 1rem;
+            border-radius: 4px;
+            margin-bottom: 1rem;
+        }
+
+        .alert-success {
+            background-color: #d4edda;
+            border: 1px solid #c3e6cb;
+            color: #155724;
+        }
+
+        .alert-error {
+            background-color: #f8d7da;
+            border: 1px solid #f5c6cb;
+            color: #721c24;
+        }
+    </style>
 </head>
 <body>
-<div class="dashboard-container">
-  <div class="sidebar">
-    <div class="sidebar-logo">NetDash Company</div>
-    <ul class="sidebar-menu">
-      <li class="active"><a href="#dashboard" onclick="showSection('dashboard')"><i class="fas fa-home"></i> Dashboard</a></li>
-      <li><a href="#purchase" onclick="showSection('purchase')"><i class="fas fa-shopping-cart"></i> Purchase Plans</a></li>
-      <li><a href="#reviews" onclick="showSection('reviews')"><i class="fas fa-star"></i> Leave Review</a></li>
-      <li><a href="#profile" onclick="showSection('profile')"><i class="fas fa-user"></i> Profile</a></li>
-      <li><a href="#" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
-    </ul>
-  </div>
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="sidebar-logo">NetDash Company</div>
+            <ul class="sidebar-menu">
+                <li class="active">
+                    <a href="#dashboard" onclick="showSection('dashboard')"><i class="fas fa-home"></i> Dashboard</a>
+                </li>
+                <li>
+                    <a href="#purchase" onclick="showSection('purchase')"><i class="fas fa-shopping-cart"></i> Purchase Plans</a>
+                </li>
+                <li>
+                    <a href="#reviews" onclick="showSection('reviews')"><i class="fas fa-star"></i> Leave Review</a>
+                </li>
+                <li>
+                    <a href="#profile" onclick="showSection('profile')"><i class="fas fa-user"></i> Profile</a>
+                </li>
+                <li>
+                    <a href="#" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                </li>
+            </ul>
+        </div>
 
-  <div class="main-content">
-    <div class="dashboard-header">
-      <h1>Company Dashboard</h1>
-      <span id="user-info"></span>
+        <!-- Main Content -->
+        <div class="main-content">
+            <div class="dashboard-header">
+                <h1>Company Dashboard</h1>
+                <span id="user-info"></span>
+            </div>
+
+            <!-- Alert Container -->
+            <div id="alert-container"></div>
+
+            <!-- Dashboard Section -->
+            <div id="dashboard-section" class="section">
+                <div class="card">
+                    <h2>Welcome to NetDash</h2>
+                    <p>Explore our cybersecurity solutions and see how we can protect your business.</p>
+                </div>
+            </div>
+
+            <!-- Purchase Section -->
+            <div id="purchase-section" class="section" style="display: none;">
+                <div class="card">
+                    <h2>Choose Your Plan</h2>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1rem;" id="plans-container">
+                        <!-- Plans will be loaded dynamically -->
+                    </div>
+                    <div id="download-app" style="margin-top: 1rem;"></div>
+                </div>
+            </div>
+
+            <!-- Reviews Section -->
+            <div id="reviews-section" class="section" style="display: none;">
+                <div class="card">
+                    <h2>Share Your Experience</h2>
+                    <form class="review-form" id="review-form">
+                        <div class="rating-input">
+                            <label>Your Rating:</label>
+                            <select id="review-rating" required>
+                                <option value="">Select Rating</option>
+                                <option value="1">1 Star</option>
+                                <option value="2">2 Stars</option>
+                                <option value="3">3 Stars</option>
+                                <option value="4">4 Stars</option>
+                                <option value="5">5 Stars</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="review-comment">Your Review:</label>
+                            <textarea id="review-comment" rows="5" required></textarea>
+                        </div>
+                        <button type="submit" class="btn">Submit Review</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Profile Section -->
+            <div id="profile-section" class="section" style="display: none;">
+                <div class="card">
+                    <h2>Manage Your Profile</h2>
+                    <form id="profile-form">
+                        <div class="form-group">
+                            <label for="profile-first-name">First Name:</label>
+                            <input type="text" id="profile-first-name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="profile-last-name">Last Name:</label>
+                            <input type="text" id="profile-last-name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="profile-email">Email:</label>
+                            <input type="email" id="profile-email" readonly>
+                        </div>
+                        <button type="submit" class="btn">Update Profile</button>
+                        <button type="button" class="btn btn-danger" onclick="confirmDeleteAccount()" style="margin-left: 1rem;">Delete Account</button>
+                    </form>
+                </div>
+            </div>
+        </div>
     </div>
 
-    <div id="dashboard-section" class="section">
-      <div class="card">
-        <h2>Welcome to NetDash</h2>
-        <p>Explore our cybersecurity solutions and see how we can protect your business.</p>
-      </div>
+    <!-- Purchase Modal -->
+    <div id="purchase-modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closePurchaseModal()">&times;</span>
+            <h2>Purchase Confirmation</h2>
+            <div id="purchase-details"></div>
+            <div style="margin-top: 1rem;">
+                <button class="btn" onclick="confirmPurchase()">Confirm Purchase</button>
+                <button class="btn btn-secondary" onclick="closePurchaseModal()" style="margin-left: 1rem;">Cancel</button>
+            </div>
+        </div>
     </div>
 
-    <div id="purchase-section" class="section" style="display: none;">
-      <div class="card">
-        <h2>Choose Your Plan</h2>
-        <div id="plans-container" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1rem;"></div>
-        <div id="download-app" style="margin-top: 1rem;"></div>
-      </div>
-    </div>
+    <script>
+        let currentUser = null;
+        let demoToken = null;
+        let demoInterval = null;
+        let selectedPlan = null;
 
-    <div id="reviews-section" class="section" style="display: none;">
-      <div class="card">
-        <h2>Leave a Review</h2>
-        <form id="review-form">
-          <select id="review-rating" required>
-            <option value="">Rate us</option>
-            <option value="5">⭐⭐⭐⭐⭐</option>
-            <option value="4">⭐⭐⭐⭐</option>
-            <option value="3">⭐⭐⭐</option>
-            <option value="2">⭐⭐</option>
-            <option value="1">⭐</option>
-          </select>
-          <textarea id="review-comment" rows="4" placeholder="Write your feedback..." required></textarea>
-          <button type="submit" class="btn">Submit</button>
-        </form>
-      </div>
-    </div>
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            checkAuth();
+            loadPlans();
+        });
 
-    <div id="profile-section" class="section" style="display: none;">
-      <div class="card">
-        <h2>Your Profile</h2>
-        <form id="profile-form">
-          <input type="text" id="profile-first-name" placeholder="First Name" required />
-          <input type="text" id="profile-last-name" placeholder="Last Name" required />
-          <input type="email" id="profile-email" readonly />
-          <button type="submit" class="btn">Update</button>
-        </form>
-      </div>
-    </div>
-  </div>
-</div>
+        // Utility functions
+        function showAlert(message, type = 'error') {
+            const alertContainer = document.getElementById('alert-container');
+            const alertDiv = document.createElement('div');
+            alertDiv.className = `alert alert-${type}`;
+            alertDiv.textContent = message;
+            alertContainer.appendChild(alertDiv);
+            
+            setTimeout(() => {
+                alertDiv.remove();
+            }, 5000);
+        }
 
-<!-- Purchase Modal -->
-<div id="purchase-modal" class="modal">
-  <div class="modal-content">
-    <span class="close" onclick="closePurchaseModal()">&times;</span>
-    <h2>Purchase Confirmation</h2>
-    <div id="purchase-details"></div>
-    <div style="margin-top: 1rem;">
-      <button class="btn" onclick="confirmPurchase()">Confirm Purchase</button>
-      <button class="btn btn-secondary" onclick="closePurchaseModal()">Cancel</button>
-    </div>
-  </div>
-</div>
+        // Authentication
+        function checkAuth() {
+            fetch('/api/profile')
+                .then(response => {
+                    if (!response.ok) {
+                        window.location.href = '/';
+                        throw new Error('Not authenticated');
+                    }
+                    return response.json();
+                })
+                .then(user => {
+                    currentUser = user;
+                    document.getElementById('user-info').textContent = `Welcome, ${user.name}`;
+                    loadUserProfile();
+                })
+                .catch(error => {
+                    console.error('Auth error:', error);
+                    window.location.href = '/';
+                });
+        }
 
-<script>
-let currentUser = null, selectedPlan = null;
+        function logout() {
+            fetch('/api/logout', { method: 'POST' })
+                .then(() => {
+                    window.location.href = '/';
+                })
+                .catch(error => {
+                    console.error('Logout error:', error);
+                });
+        }
 
-function showSection(name) {
-  document.querySelectorAll('.section').forEach(el => el.style.display = 'none');
-  document.getElementById(`${name}-section`).style.display = 'block';
-  document.querySelectorAll('.sidebar-menu li').forEach(li => li.classList.remove('active'));
-  event.target.closest('li').classList.add('active');
+        // Navigation
+        function showSection(sectionName) {
+            document.querySelectorAll('.section').forEach(section => {
+                section.style.display = 'none';
+            });
+            document.getElementById(sectionName + '-section').style.display = 'block';
+            
+            // Update active menu item
+            document.querySelectorAll('.sidebar-menu li').forEach(item => {
+                item.classList.remove('active');
+            });
+            event.target.closest('li').classList.add('active');
+        }
+
+        // Demo System
+        function startDemo() {
+            const email = document.getElementById('demo-email').value;
+            
+            fetch('/api/demo/start', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ email: email })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    demoToken = data.demo_token;
+                    document.getElementById('demo-form').style.display = 'none';
+                    document.getElementById('demo-active').style.display = 'block';
+                    startDemoCountdown(new Date(data.expiry_time));
+                    showAlert('Demo started successfully!', 'success');
+                } else {
+                    showAlert(data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Demo start error:', error);
+                showAlert('Failed to start demo. Please try again.');
+            });
+        }
+
+function startDemoCountdown(expiryISO) {
+    const expiryTime = new Date(expiryISO); // parse ISO string directly
+    demoInterval = setInterval(() => {
+        const now = new Date(); // current time in local timezone
+        const timeLeft = expiryTime.getTime() - now.getTime();
+
+        if (timeLeft <= 0) {
+            clearInterval(demoInterval);
+            document.getElementById('demo-time').textContent = 'Expired';
+            showAlert('Demo has expired', 'error');
+            return;
+        }
+
+        const minutes = Math.floor(timeLeft / 60000);
+        const seconds = Math.floor((timeLeft % 60000) / 1000);
+        document.getElementById('demo-time').textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+    }, 1000);
 }
 
-function closePurchaseModal() {
-  document.getElementById('purchase-modal').style.display = 'none';
-  selectedPlan = null;
-}
 
-function confirmPurchase() {
+        function accessDemoFeature(feature) {
+            showAlert(`Demo feature "${feature}" accessed! In a real implementation, this would show the actual feature.`, 'success');
+        }
+
+        // Plans and Purchase
+        
+function loadPlans() {
+      fetch('/api/plans')
+        .then(response => response.json())
+        .then(plans => {
+          const container = document.getElementById('plans-container');
+          container.innerHTML = '';
+
+          plans.forEach(plan => {
+            let features = Array.isArray(plan.features) ? plan.features : JSON.parse(plan.features || '[]');
+
+            const planCard = `
+              <div class="price-card ${plan.name.includes('Professional') ? 'popular' : ''}">
+                <h3>${plan.name}</h3>
+                <div class="price">$${plan.price.toLocaleString()}<br><span style="font-size: 1rem;">Every month</span></div>
+                <ul class="features-list">
+                  ${features.map(f => `<li><i class="fas fa-check"></i> ${f}</li>`).join('')}
+                </ul>
+                <button class="btn" onclick="openPurchaseModal(${plan.id}, '${plan.name}', ${plan.price})">
+                  ${plan.name.includes('Basic') ? 'Start Free Trial' : 'Select'}
+                </button>
+              </div>
+            `;
+
+            container.innerHTML += planCard;
+          });
+        })
+        .catch(err => console.error('Failed to load plans', err));
+    }
+
+
+
+
+
+    function openPurchaseModal(planId, planName, price) {
+      selectedPlan = { id: planId, name: planName, price };
+      document.getElementById('purchase-details').innerHTML = `
+        <h3>${planName}</h3>
+        <p>Price: $${price}/month</p>
+        <p>Ready to proceed with the purchase?</p>
+      `;
+      document.getElementById('purchase-modal').style.display = 'block';
+    }
+
+        function closePurchaseModal() {
+            document.getElementById('purchase-modal').style.display = 'none';
+            selectedPlan = null;
+        }
+
+        function confirmPurchase() {
   if (!selectedPlan) return;
+
   fetch('/api/purchase', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ plan_id: selectedPlan.id, amount: selectedPlan.price })
   })
-  .then(res => res.json())
+  .then(response => response.json())
   .then(data => {
     if (data.status === 'success') {
-      const isBasic = selectedPlan.name.toLowerCase().includes('basic');
-      document.getElementById('download-app').innerHTML = `<a href="https://github.com/CheeseBaconWaffles/NetDash/archive/refs/heads/main.zip" class="btn">${isBasic ? 'Download Demo App' : 'Download NetDash App'}</a>`;
+      const downloadText = selectedPlan.name.includes('Basic') ? 'Download Demo App' : 'Download NetDash App';
+      document.getElementById('download-app').innerHTML = `
+        <a href="https://github.com/CheeseBaconWaffles/NetDash/archive/refs/heads/main.zip" class="btn" download>${downloadText}</a>
+      `;
+      showAlert('✅ Purchase successful! You may now download the app.', 'success');
       closePurchaseModal();
+    } else {
+      showAlert(data.message || '❌ Purchase failed.');
     }
+  })
+  .catch(err => {
+    console.error('Purchase error:', err);
+    showAlert('❌ Failed to process purchase. Please try again.');
   });
 }
 
-function openPurchaseModal(id, name, price) {
-  selectedPlan = { id, name, price };
-  document.getElementById('purchase-details').innerHTML = `<h3>${name}</h3><p>Price: $${price}</p>`;
-  document.getElementById('purchase-modal').style.display = 'block';
-}
 
-function checkAuth() {
-  fetch('/api/profile')
-    .then(res => res.json())
-    .then(user => {
-      currentUser = user;
-      document.getElementById('user-info').textContent = `Welcome, ${user.name}`;
-      loadPlans(user.plan_id);
-      document.getElementById('profile-first-name').value = user.first_name || '';
-      document.getElementById('profile-last-name').value = user.last_name || '';
-      document.getElementById('profile-email').value = user.email || '';
-    });
-}
 
-function loadPlans(purchasedPlanId) {
-  fetch('/api/plans')
-    .then(res => res.json())
-    .then(plans => {
-      const container = document.getElementById('plans-container');
-      container.innerHTML = '';
-      plans.forEach(plan => {
-        const isPurchased = plan.id === purchasedPlanId;
-        const features = Array.isArray(plan.features) ? plan.features : JSON.parse(plan.features || '[]');
-        const downloadBtn = isPurchased ? `<a href="/downloads/netdash_app.zip" class="btn">${plan.name.toLowerCase().includes('basic') ? 'Download Demo App' : 'Download NetDash App'}</a>` : '';
-        container.innerHTML += `
-          <div class="price-card">
-            <h3>${plan.name}</h3>
-            <div class="price">$${plan.price}</div>
-            <ul class="features-list">${features.map(f => `<li><i class='fas fa-check'></i> ${f}</li>`).join('')}</ul>
-            ${isPurchased ? '' : `<button class="btn" onclick="openPurchaseModal(${plan.id}, '${plan.name}', ${plan.price})">Select</button>`}
-            ${downloadBtn}
-          </div>`;
-      });
-    });
-}
+        // Reviews
+        document.getElementById('review-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const rating = document.getElementById('review-rating').value;
+            const comment = document.getElementById('review-comment').value;
+            
+            fetch('/api/reviews', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    rating: parseInt(rating),
+                    comment: comment
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    showAlert('Review submitted successfully!', 'success');
+                    this.reset();
+                } else {
+                    showAlert(data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Review submission error:', error);
+                showAlert('Failed to submit review. Please try again.');
+            });
+        });
 
-function logout() {
-  fetch('/api/logout', { method: 'POST' }).then(() => window.location.href = '/');
-}
+        // Profile Management
+        function loadUserProfile() {
+            if (!currentUser) return;
+            
+            document.getElementById('profile-first-name').value = currentUser.first_name || '';
+            document.getElementById('profile-last-name').value = currentUser.last_name || '';
+            document.getElementById('profile-email').value = currentUser.email || '';
+        }
 
-document.getElementById('review-form').addEventListener('submit', function(e) {
-  e.preventDefault();
-  fetch('/api/reviews', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      rating: parseInt(document.getElementById('review-rating').value),
-      comment: document.getElementById('review-comment').value
-    })
-  }).then(res => res.json()).then(data => alert(data.status === 'success' ? 'Thanks for your feedback!' : data.message));
-});
+        document.getElementById('profile-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = {
+                first_name: document.getElementById('profile-first-name').value,
+                last_name: document.getElementById('profile-last-name').value,
+                name: `${document.getElementById('profile-first-name').value} ${document.getElementById('profile-last-name').value}`.trim()
+            };
+            
+            fetch('/api/profile', {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    showAlert('Profile updated successfully!', 'success');
+                    currentUser.first_name = formData.first_name;
+                    currentUser.last_name = formData.last_name;
+                    currentUser.name = formData.name;
+                    document.getElementById('user-info').textContent = `Welcome, ${formData.name}`;
+                } else {
+                    showAlert(data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Profile update error:', error);
+                showAlert('Failed to update profile. Please try again.');
+            });
+        });
 
-document.getElementById('profile-form').addEventListener('submit', function(e) {
-  e.preventDefault();
-  fetch('/api/profile', {
-    method: 'PUT',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      first_name: document.getElementById('profile-first-name').value,
-      last_name: document.getElementById('profile-last-name').value,
-      name: `${document.getElementById('profile-first-name').value} ${document.getElementById('profile-last-name').value}`.trim()
-    })
-  }).then(res => res.json()).then(data => alert(data.status === 'success' ? 'Profile updated.' : data.message));
-});
+        function confirmDeleteAccount() {
+            if (confirm('Are you sure you want to delete your account? This action cannot be undone.')) {
+                fetch('/api/profile', {
+                    method: 'DELETE'
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === 'success') {
+                        showAlert('Account deleted successfully.', 'success');
+                        setTimeout(() => {
+                            window.location.href = '/';
+                        }, 2000);
+                    } else {
+                        showAlert(data.message);
+                    }
+                })
+                .catch(error => {
+                    console.error('Account deletion error:', error);
+                    showAlert('Failed to delete account. Please try again.');
+                });
+            }
+        }
 
-document.addEventListener('DOMContentLoaded', checkAuth);
-</script>
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modal = document.getElementById('purchase-modal');
+            if (event.target === modal) {
+                closePurchaseModal();
+            }
+        }
+    </script>
 </body>
 </html>
