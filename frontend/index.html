@@ -1974,10 +1974,14 @@ document.addEventListener('DOMContentLoaded', function() {
 </section>
 
 <!-- Login prompt for guest users only -->
-<div id="loginPrompt" style="display: none;">
-  <p>Want to leave a review?</p>
-  <p>Please <a href="#" onclick="showLogin()">log in</a> to share your experience with us.</p>
+<!-- Login prompt for guest users only -->
+<div id="loginPrompt" style="display: flex; justify-content: center; align-items: center; margin-top: 30px;">
+  <div style="text-align: center; background-color: #f9f9f9; padding: 20px 30px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); max-width: 400px;">
+    <p>Want to leave a review?</p>
+    <p>Please <a href="#" onclick="showLogin()">log in</a> to share your experience with us.</p>
+  </div>
 </div>
+
 
 
 
@@ -2264,9 +2268,22 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   }
 
-  function showLogin() {
-    window.location.href = '/login.html';  // or open modal if you have one
+ function showLogin() {
+  const modal = document.querySelector('.modal-overlay');
+  if (modal) {
+    modal.style.display = 'flex';
+
+    // Show login form and activate the Login tab
+    document.getElementById('login-form').style.display = 'block';
+    document.getElementById('signup-form').style.display = 'none';
+    const tabs = document.querySelectorAll('.tab');
+    if (tabs.length > 0) {
+      tabs[0].classList.add('active');
+      tabs[1].classList.remove('active');
+    }
   }
+}
+
 
   window.addEventListener('DOMContentLoaded', checkAuthStatus);
 
