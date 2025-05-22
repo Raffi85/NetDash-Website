@@ -355,6 +355,7 @@
                     <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1rem;" id="plans-container">
                         <!-- Plans will be loaded dynamically -->
                     </div>
+                    <div id="download-app" style="margin-top: 1rem;"></div>
                 </div>
             </div>
 
@@ -547,57 +548,47 @@ function startDemoCountdown(expiryISO) {
         // Plans and Purchase
         
 function loadPlans() {
-    fetch('/api/plans')
+      fetch('/api/plans')
         .then(response => response.json())
         .then(plans => {
-            const container = document.getElementById('plans-container');
-            container.innerHTML = '';
+          const container = document.getElementById('plans-container');
+          container.innerHTML = '';
 
-            plans.forEach(plan => {
-                let features = [];
-                try {
-                    features = Array.isArray(plan.features)
-                        ? plan.features
-                        : JSON.parse(plan.features);
-                } catch (err) {
-                    features = [];
-                }
+          plans.forEach(plan => {
+            let features = Array.isArray(plan.features) ? plan.features : JSON.parse(plan.features || '[]');
 
-                const featuresList = features.map(f => `<li><i class="fas fa-check"></i> ${f}</li>`).join('');
-
-                const planCard = `
-                    <div class="price-card ${plan.name.includes('Professional') ? 'popular' : ''}">
-                        <h3>${plan.name}</h3>
-                        <div class="price">$${plan.price.toLocaleString()}<br><span style="font-size: 1rem;">Every month</span></div>
-                        <ul class="features-list">${featuresList}</ul>
-                        <button class="btn" onclick="openPurchaseModal(${plan.id}, '${plan.name}', ${plan.price})">
-                            ${plan.name.includes('Basic') ? 'Start Free Trial' : 'Select'}
-                        </button>
-                    </div>
-                `;
-
-                container.innerHTML += planCard;
-            });
-        })
-        .catch(error => {
-            console.error('Failed to load plans:', error);
-            showAlert('Failed to load plans. Please try again.');
-        });
-}
-
-
-
-
-
-        function openPurchaseModal(planId, planName, price) {
-            selectedPlan = { id: planId, name: planName, price: price };
-            document.getElementById('purchase-details').innerHTML = `
-                <h3>${planName}</h3>
-                <p>Price: $${price}/month</p>
-                <p>This will initiate the purchase process. In a real implementation, you would be redirected to a payment processor.</p>
+            const planCard = `
+              <div class="price-card ${plan.name.includes('Professional') ? 'popular' : ''}">
+                <h3>${plan.name}</h3>
+                <div class="price">$${plan.price.toLocaleString()}<br><span style="font-size: 1rem;">Every month</span></div>
+                <ul class="features-list">
+                  ${features.map(f => `<li><i class="fas fa-check"></i> ${f}</li>`).join('')}
+                </ul>
+                <button class="btn" onclick="openPurchaseModal(${plan.id}, '${plan.name}', ${plan.price})">
+                  ${plan.name.includes('Basic') ? 'Start Free Trial' : 'Select'}
+                </button>
+              </div>
             `;
-            document.getElementById('purchase-modal').style.display = 'block';
-        }
+
+            container.innerHTML += planCard;
+          });
+        })
+        .catch(err => console.error('Failed to load plans', err));
+    }
+
+
+
+
+
+    function openPurchaseModal(planId, planName, price) {
+      selectedPlan = { id: planId, name: planName, price };
+      document.getElementById('purchase-details').innerHTML = `
+        <h3>${planName}</h3>
+        <p>Price: $${price}/month</p>
+        <p>Ready to proceed with the purchase?</p>
+      `;
+      document.getElementById('purchase-modal').style.display = 'block';
+    }
 
         function closePurchaseModal() {
             document.getElementById('purchase-modal').style.display = 'none';
@@ -605,40 +596,25 @@ function loadPlans() {
         }
 
         function confirmPurchase() {
-    if (!selectedPlan) return;
-    
-    fetch('/api/purchase', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            plan_id: selectedPlan.id,
-            amount: selectedPlan.price
-        })
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.status === 'success') {
-            showAlert('Purchase completed! You can now download the app.', 'success');
-            closePurchaseModal();
+      if (!selectedPlan) return;
 
-            // Show download button
-            const downloadBtn = document.createElement('a');
-            downloadBtn.href = "https://github.com/CheeseBaconWaffles/NetDash/archive/refs/heads/main.zip"; // <- Update with your actual zip URL if needed
-            downloadBtn.className = "btn";
-            downloadBtn.download = true;
-            downloadBtn.textContent = "Download NetDash App";
-            document.getElementById('purchase-section').appendChild(downloadBtn);
-        } else {
-            showAlert(data.message);
+      fetch('/api/purchase', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ plan_id: selectedPlan.id, amount: selectedPlan.price })
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.status === 'success') {
+          const downloadText = selectedPlan.name.includes('Basic') ? 'Download Demo App' : 'Download NetDash App';
+          document.getElementById('download-app').innerHTML = `
+            <a href="https://github.com/CheeseBaconWaffles/NetDash/archive/refs/heads/main.zip" class="btn" download>${downloadText}</a>
+          `;
         }
-    })
-    .catch(error => {
-        console.error('Purchase error:', error);
-        showAlert('Failed to process purchase. Please try again.');
-    });
-}
+      })
+      .catch(err => console.error('Purchase error:', err));
+    }
+
 
 
         // Reviews
